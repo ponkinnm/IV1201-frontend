@@ -26,6 +26,12 @@ function getRows(){
     return rows;
 }
 
+//Get applicants data from the database.
+function getData(){
+    //const data = Get data from presenter
+    //return data;
+}
+
 //Set start page and number of entries per page.
 const paginationModel = {page:0, pageSize:10}; 
 
