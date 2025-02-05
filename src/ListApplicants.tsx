@@ -6,6 +6,9 @@ function ListApplicants() {
 
   return (
         <div className="outer-container">
+            <div className="text">
+              <p>Applicants</p>
+            </div>
             <div className="inner-container">
                 <ApplicantTable></ApplicantTable>
             </div>

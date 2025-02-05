@@ -1,0 +1,13 @@
+{"applicants":[
+    {"person_id":"1","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"2","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"3","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"4","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"5","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"6","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"7","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"8","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"9","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"10","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"},
+    {"person_id":"11","name":"{name}","surname":"{surname}","pnr":"{pnr}","email":"{email}","username":"{username}"}
+]}

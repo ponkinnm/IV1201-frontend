@@ -1,15 +1,41 @@
 .outer-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-  }
-  
-  .inner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    width: 300px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #ffffff;
+}
+
+.text {
+  color: black;
+}
+
+.inner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 70vw;
+  overflow: hidden;
+}
+
+.applicant-table-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.applicant-table-container .MuiPaper-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.applicant-table-container .MuiDataGrid-root {
+  flex-grow: 1;
+  overflow: auto;
+}
