@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
 //TODO: Replace test data with data from the database
-let columns = [
+const columns = [
     { field: 'testID', headerName: 'testID', width: 100}, //TODO: testID is only used for testing purposes!
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'surname', headerName: 'Surname', width: 200 },
@@ -16,20 +16,13 @@ let columns = [
 
 //TODO: Replace test data with data from the database
 function getRows(){
-    let rows = [];
+    const rows = [];
     let i = 0;
     for(i=0; i < 100; i+=2){
         rows.push({ id:i, testID:i, name:'Max', surname:'Andersson', pnr:'20250101-1234', email:'max.andersson@mail.se', username:'maxand', availiableFrom:'2025-06-01', availiableTo:'2025-08-31'});
         rows.push({ id:i+1, testID:i+1, name:'Lisa', surname:'Persson', pnr:'20250101-6789', email:'lisa.persson@mail.se', username:'lipe', availiableFrom:'2025-06-05', availiableTo:'2025-08-15'});
     }
-
     return rows;
-}
-
-//Get applicants data from the database.
-function getData(){
-    //const data = Get data from presenter
-    //return data;
 }
 
 //Set start page and number of entries per page.
