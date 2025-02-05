@@ -2,9 +2,9 @@ import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
-//TODO: Replace test columns with columns from the database
+//TODO: Replace test data with data from the database
 let columns = [
-    { field: 'testID', headerName: 'testID', width: 20}, //TODO: testID is only used for testing purposes!
+    { field: 'testID', headerName: 'testID', width: 100}, //TODO: testID is only used for testing purposes!
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'surname', headerName: 'Surname', width: 200 },
     { field: 'pnr', headerName: 'Pnr', width: 200 },
@@ -26,8 +26,10 @@ function getRows(){
     return rows;
 }
 
-const paginationModel = {page:0, pageSize:10};
+//Set start page and number of entries per page.
+const paginationModel = {page:0, pageSize:10}; 
 
+//Returns a Material UI table component.
 function ApplicantTable(){
     return(
         <div className="applicant-table-container">

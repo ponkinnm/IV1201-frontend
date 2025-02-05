@@ -2,6 +2,7 @@ import React from 'react'
 import './ListApplicants.css'
 import ApplicantTable from './ApplicantTable';
 
+//A page displaying a table containing applicant users data.
 function ListApplicants() {
   return (
         <div className="outer-container">
