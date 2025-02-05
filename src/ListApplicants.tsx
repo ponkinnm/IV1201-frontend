@@ -3,7 +3,6 @@ import './ListApplicants.css'
 import ApplicantTable from './ApplicantTable';
 
 function ListApplicants() {
-
   return (
         <div className="outer-container">
             <div className="text">

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import applicants from './applicants.json';
 
 //TODO: Replace test columns with columns from the database
 let columns = [
@@ -15,10 +14,8 @@ let columns = [
     { field: 'availiableTo', headerName: 'Availiable to', width: 200 }
 ];
 
-
 //TODO: Replace test data with data from the database
 function getRows(){
-
     let rows = [];
     let i = 0;
     for(i=0; i < 100; i+=2){
