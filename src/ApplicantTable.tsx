@@ -21,16 +21,22 @@ const columns = [
 export default function ApplicantTable() {
   const [rows, setRows] = React.useState<Applicant[]>([]);
 
-  React.useEffect(() => {
-    (async () => {
-      try {
+  const getApplications: () => Promise<Applicant[]> = async () => {
+    try {
         const response = await fetch('http://localhost:3000/getApplications');
-        const data: Applicant[] = await response.json();
-        setRows(data.map(row => ({ ...row, id: row.person_id })));
+        const data: Applicant[] = await response.json() as Applicant[];
+        return data;
       } catch (error) {
         console.error("Error fetching data:", error);
+        throw error;
       }
-    })();
+  }
+
+  React.useEffect(() => {
+    getApplications().then(applications => setRows(applications)).catch(() => {
+        console.error("Error getting applications")
+    });
+
   }, []);
 
   return (
@@ -39,7 +45,7 @@ export default function ApplicantTable() {
                 <DataGrid
                     columnHeaderHeight={25}
                     disableColumnMenu={true}
-                    rows={rows}
+                    rows={rows.map(r => ({...r, id: r.person_id}))}
                     columns={columns}
                     pageSizeOptions={[10, 25, 50, 100]}
                     sx={{ border: 0, height: '100%', overflowY: 'auto'}}
