@@ -23,7 +23,7 @@ export default function ApplicantTable() {
 
   const getApplications: () => Promise<Applicant[]> = async () => {
     try {
-        const response = await fetch('http://localhost:3000/getApplications');
+        const response = await fetch('https://amusement-4d39a0dcf184.herokuapp.com/getApplications');
         const data: Applicant[] = await response.json() as Applicant[];
         return data;
       } catch (error) {
