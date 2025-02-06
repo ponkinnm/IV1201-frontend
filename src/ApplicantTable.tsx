@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
+import { useEffect, useState } from 'react'
+import { DataGrid } from '@mui/x-data-grid'
+import { Paper, Alert } from '@mui/material'
 
 interface Applicant {
   person_id: number;
@@ -20,15 +20,19 @@ const columns = [
 
 export default function ApplicantTable() {
   const [rows, setRows] = useState<Applicant[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
-  const getApplications: () => Promise<Applicant[]> = async () => {
+  const getApplications = async () => {
     try {
-        const response = await fetch('https://amusement-4d39a0dcf184.herokuapp.com/getApplications');
-        const data: Applicant[] = await response.json() as Applicant[];
-        return data;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        throw error;
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/getApplications`);
+        if(!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+      return await response.json() as Promise<Applicant[]>;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {
+        setErrorMsg("Something went wrong when fetching applications, please try again later.");
+        return [];
       }
   }
 
@@ -40,8 +44,8 @@ export default function ApplicantTable() {
   }, []);
 
   return (
-    <div className="applicant-table-container">
-            <Paper sx={{ height: '100%', width: '100%'}}>
+            <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: '900px'}}>
+              {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
                 <DataGrid
                     columnHeaderHeight={25}
                     disableColumnMenu={true}
@@ -52,6 +56,5 @@ export default function ApplicantTable() {
                     
                 />
             </Paper>
-        </div>
     )
 }
