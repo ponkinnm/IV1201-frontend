@@ -20,22 +20,3 @@
   width: 100vw;
   overflow: hidden;
 }
-
-.applicant-table-container {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.applicant-table-container .MuiPaper-root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.applicant-table-container .MuiDataGrid-root {
-  flex-grow: 1;
-  overflow: auto;
-}
