@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
@@ -19,7 +19,7 @@ const columns = [
 ];
 
 export default function ApplicantTable() {
-  const [rows, setRows] = React.useState<Applicant[]>([]);
+  const [rows, setRows] = useState<Applicant[]>([]);
 
   const getApplications: () => Promise<Applicant[]> = async () => {
     try {
@@ -32,7 +32,7 @@ export default function ApplicantTable() {
       }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     getApplications().then(applications => setRows(applications)).catch(() => {
         console.error("Error getting applications")
     });
