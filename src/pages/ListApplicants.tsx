@@ -1,15 +1,16 @@
-import './ListApplicants.css';
-import ApplicantTable from './ApplicantTable';
+import '../ListApplicants.css';
+import ApplicantTable from '../components/ApplicantTable.tsx';
+import { Typography } from '@mui/material';
 
 //A page displaying a table containing applicant users data.
 function ListApplicants() {
   return (
     <div className="outer-container">
-      <div className="text">
+      <Typography variant="h4" component="h1">
         <p>Applicants</p>
-      </div>
+      </Typography>
       <div className="inner-container">
-        <ApplicantTable></ApplicantTable>
+        <ApplicantTable />
       </div>
     </div>
   );
