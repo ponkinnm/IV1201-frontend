@@ -8,10 +8,6 @@
   background-color: #ffffff;
 }
 
-.text {
-  color: black;
-}
-
 .inner-container {
   display: flex;
   justify-content: center;
