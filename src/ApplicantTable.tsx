@@ -24,18 +24,14 @@ export default function ApplicantTable() {
 
   const getApplications = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/getApplications`
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/getApplications`);
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
       return (await response.json()) as Promise<Applicant[]>;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
-      setErrorMsg(
-        'Something went wrong when fetching applications, please try again later.'
-      );
+      setErrorMsg('Something went wrong when fetching applications, please try again later.');
       return [];
     }
   };
@@ -49,10 +45,7 @@ export default function ApplicantTable() {
   }, []);
 
   return (
-    <Paper
-      elevation={2}
-      sx={{ height: '90%', width: '100%', maxWidth: '900px' }}
-    >
+    <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: '900px' }}>
       {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
       <DataGrid
         columnHeaderHeight={25}
