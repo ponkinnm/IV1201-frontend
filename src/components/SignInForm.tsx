@@ -13,6 +13,10 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
 
+interface AuthResponse {
+  token: string;
+}
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -57,10 +61,10 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [usernameError, setUsernameError] = React.useState(false);
-  const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -71,44 +75,41 @@ export default function SignIn() {
     setOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (usernameError || passwordError) {
-      event.preventDefault();
-      return;
+  const handleSubmit = async () => {
+
+    const credentials = {
+      username: username,
+      password: password,
     }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(credentials),
+      });
+
+      if(!response.ok){
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+      } else{
+        const data: AuthResponse= await response.json() as AuthResponse;
+        const token = data.token;
+        sessionStorage.setItem("jwt", token);
+        void navigate("/user");
+      }
     
-    //TODO: const data = new FormData(event.currentTarget);
-    
-    void navigate("/user");
-  };
-
-  const validateInputs = () => {
-    const username = document.getElementById('username') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-
-    let isValid = true;
-
-    /* TODO: Check if username or email is found in the database.*/
-    if (!username.value || !/\S+@\S+\.\S+/.test(username.value)) {
-      setUsernameError(true);
-      setUsernameErrorMessage('Please enter a valid email address or username.');
-      isValid = false;
-    } else {
-      setUsernameError(false);
-      setUsernameErrorMessage('');
+    } catch (error: unknown){
+      setError(true);
+      if(error instanceof Error){
+        setErrorText(error.message);
+      } else{
+        setErrorText("Sign in failed, please try again");
+      }
     }
-
-    /* TODO: Check if password is valid */
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
   };
 
   return (
@@ -125,7 +126,10 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void handleSubmit();
+            }}            
             noValidate
             sx={{
               display: 'flex',
@@ -137,8 +141,8 @@ export default function SignIn() {
             <FormControl>
               <FormLabel htmlFor="username">Email or username</FormLabel>
               <TextField
-                error={usernameError}
-                helperText={usernameErrorMessage}
+                error={error}
+                helperText={errorText}
                 id="username"
                 type="text"
                 name="username"
@@ -148,14 +152,15 @@ export default function SignIn() {
                 required
                 fullWidth
                 variant="outlined"
-                color={usernameError ? 'error' : 'primary'}
+                color={errorText ? 'error' : 'primary'}
+                onChange={(e)=> setUsername(e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
+                error={error}
+                helperText={errorText}
                 name="password"
                 placeholder="••••••"
                 type="password"
@@ -165,7 +170,8 @@ export default function SignIn() {
                 required
                 fullWidth
                 variant="outlined"
-                color={passwordError ? 'error' : 'primary'}
+                color={errorText ? 'error' : 'primary'}
+                onChange={(e)=> setPassword(e.target.value)}
               />
             </FormControl>
             <ForgotPassword open={open} handleClose={handleClose} />
@@ -173,7 +179,6 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
             >
               Sign in
             </Button>

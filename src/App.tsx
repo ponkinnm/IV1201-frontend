@@ -15,8 +15,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/applicants" element={<ListApplicants />}></Route>
-          <Route path="/user" element={<LoggedInUser />}></Route>
           <Route path="*" element={<NotFound />}></Route>
+          <Route path="/user" element={<LoggedInUser />}></Route>
         </Routes>
       </BrowserRouter>
     </>
