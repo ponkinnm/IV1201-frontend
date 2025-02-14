@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import SignIn from '../components/SignInForm.tsx';
 
 function HomePage() {
   return (
@@ -7,7 +8,7 @@ function HomePage() {
         <p>Home</p>
       </Typography>
       <div className="inner-container">
-        <p>TODO: Add login form</p>
+        <SignIn />
       </div>
     </div>
   );
