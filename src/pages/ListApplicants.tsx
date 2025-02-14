@@ -6,8 +6,8 @@ import { Typography } from '@mui/material';
 function ListApplicants() {
   return (
     <div className="outer-container">
-      <Typography variant="h4" component="h1">
-        <p>Applicants</p>
+      <Typography variant="h4" component="h1" sx={{margin:2}}>
+        Applicants
       </Typography>
       <div className="inner-container">
         <ApplicantTable />

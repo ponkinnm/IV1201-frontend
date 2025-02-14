@@ -19,7 +19,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  margin: 'auto',
+  margin: '25%',
   [theme.breakpoints.up('sm')]: {
     maxWidth: '450px',
   },
