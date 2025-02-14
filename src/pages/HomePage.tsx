@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import SignInForm from '../components/SignInForm.tsx';
 
-export default function HomePage() {
+function HomePage() {
   return (
     <div className="outer-container">
       <Typography variant="h4" component="h1" sx={{margin:2}}>
@@ -19,3 +19,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+export default HomePage;
