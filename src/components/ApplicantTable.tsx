@@ -31,7 +31,7 @@ export default function ApplicantTable() {
       return (await response.json()) as Promise<Applicant[]>;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
-      setErrorMsg('Something went wrong when fetching applications, please try again later.');
+      setErrorMsg('Something went wrong when fetching applicants, please try again later.');
       return [];
     }
   };

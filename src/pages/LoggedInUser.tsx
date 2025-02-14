@@ -1,5 +1,5 @@
 import '../container.css';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ function LoggedInUser() {
     <div className="outer-container">
       <div className="inner-container">
         <Typography>Successful log in!</Typography>
-        <button onClick={() => { navigate("/applicants") }}>Go to applicants</button>
+        <button onClick={() => { void navigate("/applicants") }}>Go to applicants</button>
       </div>
     </div>
   );
