@@ -4,6 +4,7 @@ import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import ListApplicants from './pages/ListApplicants.tsx';
+import LoggedInUser from './pages/LoggedInUser.tsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/applicants" element={<ListApplicants />}></Route>
+          <Route path="/user" element={<LoggedInUser />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>

@@ -10,7 +10,7 @@ function HomePage() {
       <Typography variant="body1" component="p">
         Welcome to Theme park careers!
       </Typography>
-      <Typography variant="body1" component="p" sx={{marginBottom:2}}>
+      <Typography variant="body1" component="p">
         Sign in or create a new account
       </Typography>
       <div className="inner-container">

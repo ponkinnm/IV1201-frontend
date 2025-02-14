@@ -11,12 +11,13 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/ForgotPassword';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
-  width: '100%',
+  width: '450px',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: '25%',
@@ -55,6 +56,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [usernameError, setUsernameError] = React.useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -75,12 +77,8 @@ export default function SignIn() {
       return;
     }
     const data = new FormData(event.currentTarget);
-
-    /*TODO: remove this later*/
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+    
+    navigate("/user");
   };
 
   const validateInputs = () => {
@@ -89,6 +87,7 @@ export default function SignIn() {
 
     let isValid = true;
 
+    /* TODO: Check if username or email is found in the database.
     if (!username.value || !/\S+@\S+\.\S+/.test(username.value)) {
       setUsernameError(true);
       setUsernameErrorMessage('Please enter a valid email address or username.');
@@ -96,8 +95,9 @@ export default function SignIn() {
     } else {
       setUsernameError(false);
       setUsernameErrorMessage('');
-    }
+    }*/
 
+    /* TODO: Check if password is valid
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -106,6 +106,7 @@ export default function SignIn() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
+    */
 
     return isValid;
   };
@@ -139,7 +140,7 @@ export default function SignIn() {
                 error={usernameError}
                 helperText={usernameErrorMessage}
                 id="username"
-                type="username"
+                type="text"
                 name="username"
                 placeholder="your@email.com"
                 autoComplete="username"

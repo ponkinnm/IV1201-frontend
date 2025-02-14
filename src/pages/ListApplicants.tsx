@@ -1,4 +1,4 @@
-import '../ListApplicants.css';
+import '../container.css';
 import ApplicantTable from '../components/ApplicantTable.tsx';
 import { Typography } from '@mui/material';
 
