@@ -10,6 +10,22 @@ interface Applicant {
   status_name: string;
 }
 
+interface ResponseData {
+  application_id: number;
+  person_id: number;
+  status_id: number;
+  submitted_date: string | null;
+  Person: {
+    person_id: number;
+    name: string;
+    surname: string;
+    email: string;
+  };
+  Status: {
+    status_name: string;
+  };
+}
+
 const columns = [
   { field: 'person_id', headerName: 'ID', width: 100 },
   { field: 'name', headerName: 'Name', width: 200 },
@@ -28,7 +44,17 @@ export default function ApplicantTable() {
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
-      return (await response.json()) as Promise<Applicant[]>;
+
+      const returnedData = await response.json() as ResponseData[];
+
+      const data: Applicant[] = returnedData.map((applicant) => ({
+        person_id: applicant.Person?.person_id ?? null,
+        name: applicant.Person?.name ?? "",
+        surname: applicant.Person?.surname ?? "",
+        email: applicant.Person?.email ?? "",
+        status_name: applicant.Status?.status_name ?? "Unknown",
+      }));
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       setErrorMsg('Something went wrong when fetching applicants, please try again later.');
