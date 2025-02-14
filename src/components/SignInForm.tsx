@@ -76,9 +76,10 @@ export default function SignIn() {
       event.preventDefault();
       return;
     }
-    const data = new FormData(event.currentTarget);
     
-    navigate("/user");
+    //TODO: const data = new FormData(event.currentTarget);
+    
+    void navigate("/user");
   };
 
   const validateInputs = () => {
@@ -87,7 +88,7 @@ export default function SignIn() {
 
     let isValid = true;
 
-    /* TODO: Check if username or email is found in the database.
+    /* TODO: Check if username or email is found in the database.*/
     if (!username.value || !/\S+@\S+\.\S+/.test(username.value)) {
       setUsernameError(true);
       setUsernameErrorMessage('Please enter a valid email address or username.');
@@ -95,9 +96,9 @@ export default function SignIn() {
     } else {
       setUsernameError(false);
       setUsernameErrorMessage('');
-    }*/
+    }
 
-    /* TODO: Check if password is valid
+    /* TODO: Check if password is valid */
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -106,7 +107,6 @@ export default function SignIn() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-    */
 
     return isValid;
   };
