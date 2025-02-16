@@ -1,24 +1,38 @@
+/**
+ * Header used globally for all pages.
+ * Includes the websites name and logo.
+ * A log out button is added to the header when a user is logged in.
+ **/
 import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { Attractions } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isAuthenticated, logout} from '../utils/auth';
 
+/**
+ * Create a header for the website. 
+ * A log out button is conditionally rendered based on if the user is logged in or not.
+ * 
+ * @returns Header
+ **/
 function Header() {
+  //Keep track of if the user is logged in and if the log out button should be rendered (renders if auth is true).
   const [auth, setAuth] = useState<boolean>(false);
 
   useEffect(() => {
     const updateAuth = () => {
+      //Check if the user is authenticated and update the hook.
       setAuth(isAuthenticated());
-      console.log(auth);
     };
 
+    //Check if the user is authenticated.
     updateAuth();
 
     //Listen to storage to check if the JWT token have been added or removed.
     window.addEventListener("storage", updateAuth);
 
     return () => {
+      //Remove the event listener when it is not needed anymore.
       window.removeEventListener("storage", updateAuth);
     };
 

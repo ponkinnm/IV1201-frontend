@@ -1,3 +1,11 @@
+/**
+ * Sign in form component. 
+ * 
+ * The sign in form has the following features:
+ * - Sign in: Sends the entered username and password to authentication server. If credentials are valid a jwt token is returned and the user is logged in.
+ * - Forgot password: NOT YET IMPLEMENTED
+ * - Sign up: NOT YET IMPLEMENTED
+ **/
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,7 +20,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
+import { login} from '../utils/auth';
 
 interface AuthResponse {
   token: string;
@@ -59,7 +67,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
-// { setAuth }: { setAuth: (auth: boolean) => void }
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
@@ -68,10 +76,12 @@ export default function SignIn() {
   const [errorText, setErrorText] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
+  //Open forgot password window.
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  //Close forgot password window.
   const handleClose = () => {
     setOpen(false);
   };
@@ -82,8 +92,9 @@ export default function SignIn() {
       username: username,
       password: password,
     }
-/* TODO: Uncomment
+
     try {
+      // Send credentials to the authentication server.
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/login`, {
           method: 'POST',
@@ -94,19 +105,19 @@ export default function SignIn() {
       });
 
       if(!response.ok){
+        //Server will return an error message if the user couldn't be authenticated.
         const errorMessage = await response.text();
         throw new Error(errorMessage);
       } else{
-        const data: AuthResponse= await response.json() as AuthResponse;
-        const token = data.token;
-        sessionStorage.setItem("jwt", token);
-        if(isAuthenticated()){
-          setAuth(true);
-        }
+        //Recieves the jwt token.
+        const token: AuthResponse= await response.json() as AuthResponse;
+        //Store the token in session storage.
+        login(token);
+        //Notify listeners that a token have been added to session storage.
         window.dispatchEvent(new Event('storage'));
+        //Redirect user to their user page.
         void navigate("/user");
       }
-    
     } catch (error: unknown){
       setError(true);
       if(error instanceof Error){
@@ -115,15 +126,14 @@ export default function SignIn() {
         setErrorText("Sign in failed, please try again");
       }
     }
-*/
-      //TODO: Test token, delete before final release!!! Uncomment code above
-      sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE3MDAyMzg4MDAsImV4cCI6MjIwNTM5MjQwMH0.TLmX2NmILKaAh8au9L9sP0e2l6ZdRxM9OPM8XGcOvJg");
+
+      /*TODO: Test token, delete before final release!!! CODE BELOW IS ONLY USED FOR TESTING PURPOSES ----------\/
+      const token: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE3MDAyMzg4MDAsImV4cCI6MjIwNTM5MjQwMH0.TLmX2NmILKaAh8au9L9sP0e2l6ZdRxM9OPM8XGcOvJg";
+      const authResponse: AuthResponse = { token: token };
+      login(authResponse);
       window.dispatchEvent(new Event('storage'));
-      //sessionStorage.setItem("jwt", "dfzsz");
-      if(isAuthenticated()){
-        // setAuth(true);
-      }
       void navigate("/user");
+      CODE ABOBE IS ONLY USED FOR TESTING PURPOSES -------------------------------------------------------------/\ */
   };
 
   return (
