@@ -4,7 +4,7 @@ interface DecodedToken{
     exp: number,
 }
 
-/* Check if a user is authenticated */
+/* Check if a user is authenticated, handles all login and logout logic*/
 export const isAuthenticated = (): boolean => {
     const token = sessionStorage.getItem("jwt")
 

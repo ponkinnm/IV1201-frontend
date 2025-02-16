@@ -103,6 +103,7 @@ export default function SignIn() {
         if(isAuthenticated()){
           setAuth(true);
         }
+        window.dispatchEvent(new Event('storage'));
         void navigate("/user");
       }
     
@@ -117,6 +118,7 @@ export default function SignIn() {
 */
       //TODO: Test token, delete before final release!!! Uncomment code above
       sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE3MDAyMzg4MDAsImV4cCI6MjIwNTM5MjQwMH0.TLmX2NmILKaAh8au9L9sP0e2l6ZdRxM9OPM8XGcOvJg");
+      window.dispatchEvent(new Event('storage'));
       //sessionStorage.setItem("jwt", "dfzsz");
       if(isAuthenticated()){
         // setAuth(true);
