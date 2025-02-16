@@ -5,7 +5,7 @@
  **/
 import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { Attractions } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isAuthenticated, logout} from '../utils/auth';
 

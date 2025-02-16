@@ -40,7 +40,7 @@ export const isAuthenticated = (): boolean => {
             sessionStorage.removeItem("jwt");
             return false;
         }
-    } catch (error) {
+    } catch {
         //Remove token if an error occurs.
         sessionStorage.removeItem("jwt");
         return false;

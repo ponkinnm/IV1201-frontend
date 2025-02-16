@@ -1,6 +1,5 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
-import { logout } from './utils/auth.ts';
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
@@ -9,12 +8,6 @@ import ListApplicants from './pages/ListApplicants.tsx';
 import LoggedInUser from './pages/LoggedInUser.tsx';
 
 function App() {
-  const handleLogout = () => {
-    logout();
-    const navigate = useNavigate();
-    navigate("/");
-  };
-
   return (
     <>
       <CssBaseline />
