@@ -12,6 +12,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
+import { isAuthenticated } from '../utils/auth';
 
 interface AuthResponse {
   token: string;
@@ -58,7 +59,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
-
+// { setAuth }: { setAuth: (auth: boolean) => void }
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
@@ -81,7 +82,7 @@ export default function SignIn() {
       username: username,
       password: password,
     }
-
+/* TODO: Uncomment
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/login`, {
@@ -99,6 +100,9 @@ export default function SignIn() {
         const data: AuthResponse= await response.json() as AuthResponse;
         const token = data.token;
         sessionStorage.setItem("jwt", token);
+        if(isAuthenticated()){
+          setAuth(true);
+        }
         void navigate("/user");
       }
     
@@ -110,6 +114,14 @@ export default function SignIn() {
         setErrorText("Sign in failed, please try again");
       }
     }
+*/
+      //TODO: Test token, delete before final release!!! Uncomment code above
+      sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE3MDAyMzg4MDAsImV4cCI6MjIwNTM5MjQwMH0.TLmX2NmILKaAh8au9L9sP0e2l6ZdRxM9OPM8XGcOvJg");
+      //sessionStorage.setItem("jwt", "dfzsz");
+      if(isAuthenticated()){
+        // setAuth(true);
+      }
+      void navigate("/user");
   };
 
   return (

@@ -1,6 +1,7 @@
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { Attractions } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { isAuthenticated } from '../utils/auth';
 
 function Header() {
   return (
@@ -12,6 +13,9 @@ function Header() {
             <Typography color="white" component="div" variant="h6">
               Theme park careers
             </Typography>
+            {isAuthenticated() && (
+              <Button color="secondary">Hello!</Button>
+            )}
           </Box>
         </Link>
       </Toolbar>
