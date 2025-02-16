@@ -64,15 +64,31 @@ export default function SignIn() {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (usernameError || passwordError) {
-      event.preventDefault();
       return;
     }
-
-    void navigate('/user');
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',  // for cookies
+        body: JSON.stringify({ username, password })
+      });
+  
+      if (response.ok) {
+        //const userData = await response.json(); commented out in case we want to use the response later
+        navigate('/user');
+      } else {
+        //  TODO, SHOW USER THAT THE LOGIN FAILED
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Login request failed:', error);
+    }
   };
-
   const validateInputs = () => {
     let isValid = true;
 
