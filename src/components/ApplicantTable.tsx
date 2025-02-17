@@ -22,16 +22,16 @@ export default function ApplicantTable() {
   const [rows, setRows] = useState<Applicant[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
-  const getApplications = async () => {
+  const getApplications = async (): Promise<Applicant[]> => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/applications`);
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
-
-      const data = await response.json();
+  
+      const data = (await response.json()) as Applicant[];
       return data;
-    } catch (e) {
+    } catch {
       setErrorMsg('Something went wrong when fetching applicants, please try again later.');
       return [];
     }
