@@ -18,12 +18,6 @@ declare module '@mui/material/styles/createPalette' {
     800: string;
     900: string;
   }
-
-  interface PaletteColor extends ColorRange {}
-
-  interface Palette {
-    baseShadow: string;
-  }
 }
 
 const defaultTheme = createTheme();
@@ -285,8 +279,7 @@ export const colorSchemes = {
         hover: alpha(gray[200], 0.2),
         selected: `${alpha(gray[200], 0.3)}`,
       },
-      baseShadow:
-        'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',
+      baseShadow: 'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',
     },
   },
   dark: {
@@ -334,8 +327,7 @@ export const colorSchemes = {
         hover: alpha(gray[600], 0.2),
         selected: alpha(gray[600], 0.3),
       },
-      baseShadow:
-        'hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px',
+      baseShadow: 'hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px',
     },
   },
 };
@@ -394,10 +386,7 @@ export const shape = {
   borderRadius: 8,
 };
 
-// @ts-ignore
-const defaultShadows: Shadows = [
-  'none',
-  'var(--template-palette-baseShadow)',
-  ...defaultTheme.shadows.slice(2),
-];
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const defaultShadows: Shadows = ['none', 'var(--template-palette-baseShadow)', ...defaultTheme.shadows.slice(2)];
 export const shadows = defaultShadows;
