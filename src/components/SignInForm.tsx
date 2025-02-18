@@ -49,7 +49,6 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
-
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -64,9 +63,12 @@ export default function SignIn() {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
 
+  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (usernameError || passwordError) {
+
+    // Validate inputs before proceeding
+    if (!validateInputs()) {
       return;
     }
   
@@ -74,25 +76,24 @@ export default function SignIn() {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',  // for cookies
-        body: JSON.stringify({ username, password })
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
       });
   
       if (response.ok) {
-        //const userData = await response.json(); commented out in case we want to use the response later
-        navigate('/user');
+        void navigate('/user');
       } else {
-        //  TODO, SHOW USER THAT THE LOGIN FAILED
+         //  TODO, SHOW USER THAT THE LOGIN FAILED
         console.error('Login failed');
       }
+      
     } catch (error) {
       console.error('Login request failed:', error);
     }
   };
+
   const validateInputs = () => {
     let isValid = true;
-
-    /* TODO: Check if username or email is found in the database.*/
     if (!username) {
       setUsernameError(true);
       setUsernameErrorMessage('Please enter a valid email address or username.');
@@ -101,8 +102,6 @@ export default function SignIn() {
       setUsernameError(false);
       setUsernameErrorMessage('');
     }
-
-    /* TODO: Check if password is valid */
     if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -111,9 +110,9 @@ export default function SignIn() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-
     return isValid;
   };
+
 
   return (
     <div>
@@ -124,14 +123,9 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(event) => { void handleSubmit(event); }}
             noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
-            }}
+            sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
           >
             <FormControl>
               <FormLabel htmlFor="username">Email or username</FormLabel>
@@ -170,7 +164,7 @@ export default function SignIn() {
               />
             </FormControl>
             <ForgotPassword open={showForgotPasswordDialog} handleClose={toggleForgotPasswordDialog} />
-            <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+            <Button type="submit" fullWidth variant="contained">
               Sign in
             </Button>
             <Link
