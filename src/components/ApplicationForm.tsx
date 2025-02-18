@@ -6,42 +6,61 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 export default function ApplicationForm(){
 
-    const addCompetence = (index: number) => {
-        console.log("numbers: " + index);
-        if(index < 2){
+    const addCompetence = () => {
+        if(competence.length < 3){
+            setCompetence([...competence, { id: id }]);
             setId(id + 1);
-            setCompetence(c => [...c, <CompetenceInput key={competence.length} addCompetenceInput={addCompetence} removeCompetence={removeCompetence} id={id}/>]);
         }
     };
 
     const removeCompetence = (id: number) => {
-        setCompetence(c => c.filter((_, i) => i !== id));
+        setCompetence((competenceArray) => {
+            if (competenceArray.length === 1) {
+                return competenceArray;
+            }
+            return competenceArray.filter(c => c.id !== id);
+        });
     };
 
-    const [competence, setCompetence] = useState<JSX.Element[]>([<CompetenceInput key={0} addCompetenceInput={addCompetence} removeCompetence={removeCompetence} id={0}/>]);
-    const [id, setId] = useState(0);
+    const [competence, setCompetence] = useState<{ id: number }[]>([{ id: 0 }]);
+    const [id, setId] = useState(1);
 
     return(
-        <div>
+        <Box sx={{display: "flex", flexDirection: "column"}}>
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <Typography variant="h4">Application</Typography>
+            </Box>
+            <Box sx={{height: 50, width: "100%" }}></Box>
             <Typography sx={{marginLeft: 1}}>Choose up to 3 competencies and enter years of experience</Typography>
             <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competency to the application</Typography>
-            {competence}
-        </div>
+            {competence.map((c)=>(
+                <CompetenceInput key={c.id} id={c.id} addCompetence={addCompetence} removeCompetence={removeCompetence}/>
+            ))}
+            <Box sx={{height: 50, width: "100%" }}></Box>
+            <Typography sx={{marginLeft: 1, marginBottom: 2}}>Enter availability</Typography>
+                {DateInput()}
+            <Box sx={{height: 50, width: "100%" }}></Box>
+        </Box>
     );
 }
 
-function CompetenceInput({ addCompetenceInput, removeCompetence, id}: { addCompetenceInput: (id: number) => void, removeCompetence: (id: number) => void, id: number}){
+function CompetenceInput({ id, addCompetence, removeCompetence}: { id: number, addCompetence: () => void, removeCompetence: (id: number) => void }){
     const [entered, setEntered] = useState(false);
+    var competenceValue;
+
     return(
         <Box sx={{ marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
             <FormControl fullWidth>
-                <InputLabel id="competence-label">Competence</InputLabel>
+                <InputLabel id="${id}">Competence</InputLabel>
                 <Select
-                    id="competence"
-                    //value={age}
+                    id="competence-${id}"
+                    value={competenceValue}
                     label="Competence"
                     //onChange={handleChange}
                 >
@@ -50,9 +69,9 @@ function CompetenceInput({ addCompetenceInput, removeCompetence, id}: { addCompe
                     <MenuItem value={3}>Roller coaster operation</MenuItem>
                 </Select>
             </FormControl>
-            <TextField id="years-of-experience" label="Years of experience" variant="outlined" />
+            <TextField id="experience-${id}" label="Years of experience" variant="outlined" sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100, type: "number" }}/>
             {
-                entered == false && id < 2 ? <Button onClick={() => {setEntered(true), addCompetenceInput(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button> : <></>
+                entered == false ? <Button onClick={() => {setEntered(true), addCompetence()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button> : <></>
             }
             {
                 entered == true ? <Button onClick={() => {setEntered(false), removeCompetence(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> : <></>
@@ -61,6 +80,25 @@ function CompetenceInput({ addCompetenceInput, removeCompetence, id}: { addCompe
         </Box>
     );
 }
+
+function DateInput(){
+    return(
+        <Box sx={{ marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Box sx={{marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>From: </Typography>
+                    <DatePicker sx={{ width: 330 }} />   
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>To: </Typography>
+                    <DatePicker sx={{ width: 330}} />
+                    <Button sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
+                </Box>
+            </LocalizationProvider>
+        </Box>
+    );
+}
+
+
+
 //#1976d2
 //Competence - can be multiple in a list
 //Years of expertise -box? number between 0 to 100?
