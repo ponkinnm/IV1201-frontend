@@ -24,7 +24,11 @@ export default function ApplicantTable() {
 
   const getApplications = async (): Promise<Applicant[]> => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/applications`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/applications`, {
+        credentials: 'include'  // This is important for sending cookies
+      });
+
+      
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
