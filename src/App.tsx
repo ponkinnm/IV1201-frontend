@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import ListApplicants from './pages/ListApplicants.tsx';
 import LoggedInUser from './pages/LoggedInUser.tsx';
+import { theme } from './theme/theme.ts';
 
 function App() {
   return (
-    <>
-      <CssBaseline />
+    <ThemeProvider theme={theme} disableTransitionOnChange>
+      <CssBaseline enableColorScheme />
       <BrowserRouter>
         <Header />
         <Routes>
@@ -19,7 +20,7 @@ function App() {
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </ThemeProvider>
   );
 }
 
