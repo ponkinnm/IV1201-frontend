@@ -16,12 +16,12 @@ export default function ApplicationForm(){
 
     const addRow = (type: "competence" | "date") => {
         if (type === "competence") {
-            setCompetence(array => {
-                //if(array.length>=3){return array;}
-                const id = Math.max(...array.map(a => a.id), 0) + 1;
-                return [...array, { id: id, type: "competence" }];
-                
-            });
+            if(competence.length < 3){
+                setCompetence(array => {
+                    const id = Math.max(...array.map(a => a.id), 0) + 1;
+                    return [...array, { id: id, type: "competence" }];
+                });
+            } 
         } else if (type === "date") {
             setAvailability(array => {
                 const id = Math.max(...array.map(a => a.id), 0) + 1;
@@ -33,7 +33,10 @@ export default function ApplicationForm(){
     const removeRow = (id: number, type: "competence" | "date") => {
         if (type === "competence") {
             if (competence.length > 1) {
-                setCompetence(array => array.filter(a => a.id !== id));
+                console.log(competence); // Log the current state before update
+                if (competence.length > 1) {
+                    setCompetence(array => array.filter(a => a.id !== id));
+                }
             }
         } else if (type === "date") {
             if (availability.length > 1) {
@@ -112,7 +115,7 @@ function CompetenceRow(){
                     <MenuItem value={3}>Roller coaster operation</MenuItem>
                 </Select>
             </FormControl>
-            <TextField id="experience-${id}" label="Years of experience" variant="outlined" sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100, type: "number" }}/>
+            <TextField id="experience-${id}" label="Years of experience" type={"number"} variant="outlined" sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}/>
         </Box>
     );
 }
