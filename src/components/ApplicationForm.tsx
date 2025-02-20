@@ -33,7 +33,6 @@ export default function ApplicationForm(){
     const removeRow = (id: number, type: "competence" | "date") => {
         if (type === "competence") {
             if (competence.length > 1) {
-                console.log(competence); // Log the current state before update
                 if (competence.length > 1) {
                     setCompetence(array => array.filter(a => a.id !== id));
                 }
@@ -57,12 +56,12 @@ export default function ApplicationForm(){
             <Typography sx={{marginLeft: 1}}>Choose up to 3 competencies and enter years of experience.</Typography>
             <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competency to the application.</Typography>
                 {competence.map((a)=>(
-                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("competence")} removeRow={() => removeRow(a.id, "competence")} renderComponent={() => CompetenceRow()}/>
+                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("competence")} removeRow={() => removeRow(a.id, "competence")} renderComponent={(enableInput: boolean) => <CompetenceRow enableInput={enableInput} />}/>
                 ))}
                 <Box sx={{height: 50, width: "100%" }}></Box>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>Enter the date of the periods you are availiable to work.</Typography>
                 {availability.map((a)=>(
-                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("date")} removeRow={() => removeRow(a.id, "date")} renderComponent={() => DateRow()}/>
+                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("date")} removeRow={() => removeRow(a.id, "date")} renderComponent={() => <DateRow />}/>
                 ))} 
             </Box>               
             <Box sx={{height: 50, width: "100%" }}></Box>
@@ -81,18 +80,39 @@ export default function ApplicationForm(){
  * @param {function} renderComponent Function that returns the component to be rendered
  * @returns {JSX.Element} DynamicInput
  */
-function DynamicInput({ id, addRow: addRow, removeRow: removeRow, renderComponent: renderComponent}: { id: number, addRow: () => void, removeRow: (id: number) => void, renderComponent: () => JSX.Element }){
-    const [entered, setEntered] = useState(false);
+function DynamicInput({ id, addRow: addRow, removeRow: removeRow, renderComponent: renderComponent}: { id: number, addRow: () => void, removeRow: (id: number) => void, renderComponent: (enableInput: boolean) => JSX.Element }){
+    const [entered, setEntered] = useState(false); //Render an add or remove button
+    const [enableInput, setEnableInput] = useState(false); //Enable or disable input boxes
+    
     return(
         <Box sx={{ marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
-            {renderComponent()}
+            {renderComponent(enableInput)}
             {
-                entered == true ? <Button onClick={() => {setEntered(false); removeRow(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> 
-                                : <Button onClick={() => {setEntered(true); addRow()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
+                entered == true ? <Button onClick={() => {setEntered(false); setEnableInput(false); removeRow(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> 
+                                : <Button onClick={() => {setEntered(true); setEnableInput(true); addRow()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
             }
             
         </Box>
     );
+}
+
+interface dataInput{
+    competenceProfileId: [];
+    yearsOfExperience: [];
+}
+
+function dataInput(value: any){
+    console.log(value);
+}
+
+/**
+ * Keep track of unique ids given to each element in input list.
+ */
+let id = 1;
+function getID(){
+    const currentID = id;
+    id++;
+    return currentID;
 }
 
 /**
@@ -101,24 +121,38 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, renderComponen
  * 
  * @returns {JSX.Element} CompetenceRow
  */
-function CompetenceRow(){
-    const [competenceProfileId, setCompetenceProfileId] = useState(""); //Value representing a competency: 1-ticket sales 2-lotteries 3-roller coaster operation replace with hooks
+function CompetenceRow({ enableInput }: { enableInput: boolean }){
+    const [competenceProfileId, setCompetenceProfileId] = useState("");
+    const [yearsOfExperience, setYearsOfExperience] = useState("");
+    const [selected, setSelected] = useState<boolean[]>([false, false, false]);
+
     return(
         <Box sx={{ minWidth: 750, display: "flex", alignItems: "center", gap: 1 }}>
             <FormControl fullWidth>
-                <InputLabel id="${id}">Competence</InputLabel>
+                <InputLabel>Competence</InputLabel>
                 <Select
-                    id="competence-${id}"
+                    name={"competence"}
                     value={competenceProfileId}
-                    label="Competence"
-                    onChange={(event) => setCompetenceProfileId(event.target.value)}
+                    disabled={enableInput}
+                    onChange={(event) => {
+                        setCompetenceProfileId(event.target.value);
+                    }}
                 >
                     <MenuItem value={1}>Ticket sales</MenuItem>
                     <MenuItem value={2}>Lotteries</MenuItem>
                     <MenuItem value={3}>Roller coaster operation</MenuItem>
                 </Select>
             </FormControl>
-            <TextField id="experience-${id}" label="Years of experience" type={"number"} variant="outlined" sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}/>
+            <TextField 
+                id={"experience"}
+                label={"Years of experience"}
+                value={yearsOfExperience}
+                type={"number"} 
+                variant={"outlined"}
+                disabled={enableInput}
+                onChange={(event) => setYearsOfExperience(event.target.value)}
+                sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}
+            />
         </Box>
     );
 }
