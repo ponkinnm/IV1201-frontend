@@ -83,11 +83,12 @@ export default function SignIn() {
       if (response.ok) {
         void navigate('/user');
       } else {
-         //  TODO, SHOW USER THAT THE LOGIN FAILED
+        alert('Login failed. Please check your username and password.');
         console.error('Login failed');
       }
       
     } catch (error) {
+      alert('Failed to connect to server. Please check your connection and try again.');
       console.error('Login request failed:', error);
     }
   };
