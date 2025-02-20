@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -46,22 +46,25 @@ export default function ApplicationForm(){
     };
 
     return(
-        <Box sx={{display: "flex", flexDirection: "column"}}>
-            <Box minHeight={50}></Box>
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                <Typography variant="h4">Application</Typography>
+        <Box sx={{ minHeight: "100vh", marginTop: 4}}>
+            <Box>
+                <Box sx={{display: "flex", justifyContent: "center", alignItems: "start"}}>
+                    <Typography variant="h4">Application</Typography>
+                </Box>
             </Box>
+            <Box sx={{display: "flex", flexDirection: "column"}}>
             <Box sx={{height: 50, width: "100%" }}></Box>
             <Typography sx={{marginLeft: 1}}>Choose up to 3 competencies and enter years of experience.</Typography>
             <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competency to the application.</Typography>
-            {competence.map((a)=>(
-                <DynamicInput key={a.id} id={a.id} addRow={() => addRow("competence")} removeRow={() => removeRow(a.id, "competence")} renderComponent={() => CompetenceRow()}/>
-            ))}
-            <Box sx={{height: 50, width: "100%" }}></Box>
-            <Typography sx={{marginLeft: 1, marginBottom: 2}}>Enter the date periods you are availiable to work.</Typography>
-            {availability.map((a)=>(
-                <DynamicInput key={a.id} id={a.id} addRow={() => addRow("date")} removeRow={() => removeRow(a.id, "date")} renderComponent={() => DateRow()}/>
-            ))}                
+                {competence.map((a)=>(
+                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("competence")} removeRow={() => removeRow(a.id, "competence")} renderComponent={() => CompetenceRow()}/>
+                ))}
+                <Box sx={{height: 50, width: "100%" }}></Box>
+                <Typography sx={{marginLeft: 1, marginBottom: 2}}>Enter the date of the periods you are availiable to work.</Typography>
+                {availability.map((a)=>(
+                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("date")} removeRow={() => removeRow(a.id, "date")} renderComponent={() => DateRow()}/>
+                ))} 
+            </Box>               
             <Box sx={{height: 50, width: "100%" }}></Box>
         </Box>
     );
@@ -84,8 +87,8 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, renderComponen
         <Box sx={{ marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
             {renderComponent()}
             {
-                entered == true ? <Button onClick={() => {setEntered(false), removeRow(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> 
-                                : <Button onClick={() => {setEntered(true), addRow()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
+                entered == true ? <Button onClick={() => {setEntered(false); removeRow(id)}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> 
+                                : <Button onClick={() => {setEntered(true); addRow()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
             }
             
         </Box>
@@ -99,16 +102,16 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, renderComponen
  * @returns {JSX.Element} CompetenceRow
  */
 function CompetenceRow(){
-    var competenceValue; //Value representing a competency: 1-ticket sales 2-lotteries 3-roller coaster operation replace with hooks
+    const [competenceProfileId, setCompetenceProfileId] = useState(""); //Value representing a competency: 1-ticket sales 2-lotteries 3-roller coaster operation replace with hooks
     return(
         <Box sx={{ minWidth: 750, display: "flex", alignItems: "center", gap: 1 }}>
             <FormControl fullWidth>
                 <InputLabel id="${id}">Competence</InputLabel>
                 <Select
                     id="competence-${id}"
-                    value={competenceValue}
+                    value={competenceProfileId}
                     label="Competence"
-                    //onChange={handleChange}
+                    onChange={(event) => setCompetenceProfileId(event.target.value)}
                 >
                     <MenuItem value={1}>Ticket sales</MenuItem>
                     <MenuItem value={2}>Lotteries</MenuItem>

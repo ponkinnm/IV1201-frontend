@@ -1,18 +1,15 @@
-import '../container.css';
-import { Typography } from '@mui/material';
-
+import { Typography, Button, Box} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function LoggedInUser() {
   const navigate = useNavigate(); //TODO: Used temporary for testing purposes, remove later!
 
   return (
-    <div className="outer-container">
-      <div className="inner-container">
-        <Typography>Successful log in!</Typography>
-        <button onClick={() => { void navigate("/applicants") }}>Go to applicants</button>
-      </div>
-    </div>
+    <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+      <Typography>Successful log in!</Typography>
+      <Button onClick={() => { void navigate("/applicants") }}>Application list</Button>
+      <Button onClick={() => { void navigate("/apply") }}>Create application</Button>
+    </Box>
   );
 }
 

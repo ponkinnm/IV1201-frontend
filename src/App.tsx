@@ -23,7 +23,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Header />
-        <Container sx={{ marginTop: '64px', paddingBottom: '20px' }}>
+        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100vh", minWidth: "100vw", marginTop: "64px", overflowY: "auto"}}>
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/applicants" element={<ListApplicants />}></Route>
