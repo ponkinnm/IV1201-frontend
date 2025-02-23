@@ -4,51 +4,69 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Button, Typography } from '@mui/material';
+import dayjs from 'dayjs';
+import { Button, setRef, Typography } from '@mui/material';
 import { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-export default function ApplicationForm({ submitData: submitData}:{submitData: (data: string) => void}){
-    const [id, setId] = useState(3); //Unique id for each input row
-    const [competence, setCompetence] = useState<{ id: number, type: "competence"}[]>([{ id: 1, type: "competence"}]); //List all rendered CompetencyRow components
-    const [availability, setAvailability] = useState<{ id: number, from: Date | null, to: Date | null, type: "date"}[]>([{ id: 2, from: null, to: null, type: "date" }]); //List all rendered DateRow components
+export default function ApplicationForm({ submitData}:{submitData: (competenceProfileID: any, yearsOfExperience: any, availabilityFrom: any, availabilityTo: any) => void}){
+    const [id, setId] = useState(1); //Unique id for each input box
+    const [competenceRow, setCompetenceRow] = useState<{ id: number, type: "competence"}[]>([{ id: id, type: "competence"}]); //List all rendered CompetencyRow components
+    const [availabilityRow, setAvailabilityRow] = useState<{ id: number, type: "date"}[]>([{ id: id, type: "date" }]); //List all rendered DateRow components
 
-   const [competenceProfileID, setCompetenceProfileID] = useState<{id: number; type: string; value: string}[]>([]);
-   const [yearsOfExperience, setYearsOfExperience] = useState<{id: number; type: string; value: string}[]>([]);
-   const [dateData, setDateData] = useState<string[]>([]);
+    //Data from competence rows
+    const [competenceProfileID, setCompetenceProfileID] = useState<{id: number; name: string; value: string}[]>([]);
+    const [yearsOfExperience, setYearsOfExperience] = useState<{id: number; name: string; value: string}[]>([]);
+    //Data from date rows
+    const [availabilityFrom, setAvailabilityFrom] = useState<{id: number; from: string}[]>([]);
+    const [availabilityTo, setAvailabilityTo] = useState<{id: number; to: string}[]>([]);
 
+
+    //Teporarily save currently entered data 
     const addData = (id: number, target: any) => {
+        const newEntry = { id: id, name: target.name, value: target.value };
         if(target.name === "competence_profile_id"){
-            if( !competenceProfileID.some( item =>  item.value === target.value )){ setCompetenceProfileID(prev => [...prev, target]); }
+            if( !competenceProfileID.some( item =>  item.id === target.id && item.value !== target.value)){ 
+                setCompetenceProfileID(prev => [...prev, newEntry]);
+            }
         } else if(target.name === "years_of_experience"){
-            if( !yearsOfExperience.some( item => item.id === id && item.value === target.value )){ setYearsOfExperience(prev => [...prev, target]);}
-            console.log(target.id);
-        } else if(target.name === "date"){
-            console.log(target.name);
+            setYearsOfExperience(prev =>
+                prev.some(item => Number(item.id) === id)
+                    ? prev.map(item => (Number(item.id) === id ? newEntry : item))
+                    : [...prev, newEntry]
+            );
+        } else if(target.type === "date"){
+            if(target.name === "from_date"){
+                setAvailabilityFrom(prev =>
+                    prev.some(item => item.id === id)
+                        ? prev.map(item => item.id === id ? {id, from: target.dateString} : item)
+                        : [...prev, {id, from: target.dateString}]
+                );
+            } else if(target.name === "to_date"){
+                setAvailabilityTo(prev =>
+                    prev.some(item => item.id === id)
+                        ? prev.map(item => item.id === id ? {id, to: target.dateString} : item)
+                        : [...prev, {id, to: target.dateString}]
+                );
+            }  
         }
-        //setTestCom(prev => [...prev, value]);
-        console.log("-----\/");
-        console.log(competenceProfileID);
-        console.log(yearsOfExperience);
     };
 
-    const removeData = (id: number, target: any) => {
-        if(target.name === "competence_profile_id"){
-            setCompetenceProfileID(prev => {
-                return [...prev.filter(item => item.id !== id)];
-            });
-        } else if(target.name === "years_of_experience"){
-            
-        } else if(target.name === "date"){
-
+    //Remove temporarily stored data
+    const removeData = (id: number, type: "competence" | "date") => {
+        if(type === "competence"){
+            setCompetenceProfileID(prev => { return [...prev.filter(item => item.id !== id)]; });
+            setYearsOfExperience(prev => { return [...prev.filter(item => item.id !== id)]; });
+        } else if(type === "date"){
+            setAvailabilityFrom(prev => { return [...prev.filter(item => item.id !== id)]; });
+            setAvailabilityTo(prev => { return [...prev.filter(item => item.id !== id)]; });
         }
     };
 
     const submit = () => {
-        console.log(yearsOfExperience);
-        submitData("data submitted");
+        submitData(competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo);
     };
 
 
@@ -57,11 +75,11 @@ export default function ApplicationForm({ submitData: submitData}:{submitData: (
         setId(prevId => {
             const newId = prevId + 1;
             if (type === "competence") {
-                if (competence.length < 3) {
-                    setCompetence(prev => [...prev, { id: newId, type: "competence" }]);
+                if (competenceRow.length < 3) {
+                    setCompetenceRow(prev => [...prev, { id: newId, type: "competence" }]);
                 }
             } else if (type === "date") {
-                setAvailability(prev => [...prev, { id: newId, from: null, to: null, type: "date" }]);
+                setAvailabilityRow(prev => [...prev, { id: newId, from: null, to: null, type: "date" }]);
             }
             return newId;
         });
@@ -69,17 +87,19 @@ export default function ApplicationForm({ submitData: submitData}:{submitData: (
     
 
     const removeRow = (id: number, type: "competence" | "date") => {
-        console.log("REMPVED: " + id);
         if (type === "competence") {
-            if (competence.length > 1) {
-                setCompetence(prev => prev.filter(a => a.id !== id));
+            removeData(id, type);
+
+            if (competenceRow.length > 1) {
+                setCompetenceRow(prev => prev.filter(a => a.id !== id));
             }
             setYearsOfExperience(prev => {
                 return [...prev.filter(item => item.id !== id)];
             });
         } else if (type === "date") {
-            if (availability.length > 1) {
-                setAvailability(prev => prev.filter(a => a.id !== id));
+            removeData(id, type);
+            if (availabilityRow.length > 1) {
+                setAvailabilityRow(prev => prev.filter(a => a.id !== id));
             }
         }
     };
@@ -95,14 +115,14 @@ export default function ApplicationForm({ submitData: submitData}:{submitData: (
             <Box sx={{height: 50, width: "100%" }}></Box>
             <Typography sx={{marginLeft: 1}}>Select up to three competencies and provide your years of experience.</Typography>
             <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competence to your application.</Typography>
-                {competence.map((a)=>(
-                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("competence")} removeRow={() => removeRow(a.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={a.id} enableInput={enableInput} addData={addData}/>}/>
+                {competenceRow.map((row)=>(
+                    <DynamicInput key={`competence-${row.id}`} id={row.id} addRow={() => addRow("competence")} removeRow={() => removeRow(row.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={row.id} enableInput={enableInput} addData={addData}/>}/>
                 ))}
                 <Box sx={{height: 50, width: "100%" }}></Box>
                 <Typography sx={{marginLeft: 1}}>Please provide the dates for the periods you are available to work.</Typography>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the date to your application.</Typography>
-                {availability.map((a)=>( 
-                    <DynamicInput key={a.id} id={a.id} addRow={() => addRow("date")} removeRow={() => removeRow(a.id, "date")} addData={addData} component={(enableInput: boolean) => <DateRow id = {a.id} enableInput={enableInput} addData={addData}/>}/>
+                {availabilityRow.map((row)=>( 
+                    <DynamicInput key={`date-${row.id}`} id={row.id} addRow={() => addRow("date")} removeRow={() => removeRow(row.id, "date")} addData={addData} component={(enableInput: boolean) => <DateRow id = {row.id} enableInput={enableInput} addData={addData}/>}/>
                 ))} 
             </Box>               
             <Box sx={{height: 50, width: "100%" }}></Box>
@@ -152,9 +172,9 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
             <FormControl fullWidth>
                 <InputLabel>Competence</InputLabel>
                 <Select
+                    id={`${id}`}
                     name={"competence_profile_id"}
                     value={competenceProfile}
-                    id={`${id}`}
                     disabled={enableInput}
                     onChange={(event) => {
                         setCompetenceProfile(event.target.value);
@@ -168,17 +188,15 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
             </FormControl>
             <TextField 
                 id={`${id}`}
-                label={"Years of experience"}
-                value={yearsOfExperience}
-                type={"number"} 
-                variant={"outlined"}
                 name={"years_of_experience"}
+                value={yearsOfExperience}
                 disabled={enableInput}
+                variant={"outlined"}
+                sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}
                 onChange={(event) => {
                     setYearsOfExperience(event.target.value);
                     addData(id, event.target);
                 }}
-                sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}
             />
         </Box>
     );
@@ -190,16 +208,41 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
  * @returns {JSX.Element} DateRow
  */
 function DateRow({ id, enableInput, addData: addData}: { id: number, enableInput: boolean, addData: (id: number, value: any) => void }){
-    const a = enableInput; //TODO: Implement same behaviour as CompetenceRow
-    const b = addData;
+    const [from, setFrom] = useState(dayjs());
+    const [to, setTo] = useState(dayjs());
+
     return(
         <Box sx={{ minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Box sx={{marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
                     <Typography sx={{ display: "flex", alignItems: "center" }}>From: </Typography>
-                    <DatePicker sx={{ width: 330 }} />   
+                    <DatePicker
+                        name={"from_date"}
+                        value={from}
+                        disabled={enableInput}
+                        format={"YYYY-MM-DD"}
+                        sx={{ width: 330 }} 
+                        onChange={(event) => {
+                            if(event !== null){
+                                const dateString = event.format('YYYY-MM-DD');
+                                addData(id, {type: "date", name: "from_date", dateString});
+                            }
+                        }}
+                    />   
                     <Typography sx={{ display: "flex", alignItems: "center" }}>To: </Typography>
-                    <DatePicker sx={{ width: 330}} />
+                    <DatePicker 
+                        name={"to_date"}
+                        value={to}
+                        disabled={enableInput}
+                        format={"YYYY-MM-DD"}
+                        sx={{ width: 330}} 
+                        onChange={(event) => {
+                            if(event !== null){
+                                const dateString = event.format('YYYY-MM-DD');
+                                addData(id, {type: "date", name: "to_date", dateString});
+                            }
+                        }}
+                    />
                 </Box>
             </LocalizationProvider>
         </Box>
