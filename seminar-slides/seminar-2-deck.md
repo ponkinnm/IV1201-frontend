@@ -70,6 +70,7 @@ VT2025
 - (17) CI/CD Pipeline
 - (24) Different browsers
 - (28) Data migration
+- (32) Add three resources (Sequelize, ESLint, Swagger)
 
 [//]: # (> 1: Footnote)
 
