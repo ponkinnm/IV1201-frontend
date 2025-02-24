@@ -17,12 +17,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: 'column',
   alignSelf: 'center',
   width: '450px',
+  maxWidth: 'min(450px, 90dvw)',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  margin: '25%',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
+  marginTop: '25%',
   boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   ...theme.applyStyles('dark', {
     boxShadow: 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
@@ -63,7 +61,6 @@ export default function SignIn() {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
 
-  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -71,7 +68,7 @@ export default function SignIn() {
     if (!validateInputs()) {
       return;
     }
-  
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
@@ -79,14 +76,13 @@ export default function SignIn() {
         credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
-  
+
       if (response.ok) {
         void navigate('/user');
       } else {
-         //  TODO, SHOW USER THAT THE LOGIN FAILED
+        //  TODO, SHOW USER THAT THE LOGIN FAILED
         console.error('Login failed');
       }
-      
     } catch (error) {
       console.error('Login request failed:', error);
     }
@@ -113,7 +109,6 @@ export default function SignIn() {
     return isValid;
   };
 
-
   return (
     <div>
       <SignInContainer direction="column" justifyContent="space-between">
@@ -123,7 +118,9 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={(event) => { void handleSubmit(event); }}
+            onSubmit={(event) => {
+              void handleSubmit(event);
+            }}
             noValidate
             sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
           >
