@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CssBaseline, Container} from '@mui/material';
+import { CssBaseline, ThemeProvider, Container} from '@mui/material';
 import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import ListApplicants from './pages/ListApplicants.tsx';
 import LoggedInUser from './pages/LoggedInUser.tsx';
 import Application from './pages/Application.tsx';
+import { theme } from './theme/theme.ts';
 
 /**
  * Routes to the following views:
@@ -19,8 +20,8 @@ import Application from './pages/Application.tsx';
  */
 function App() {
   return (
-    <>
-      <CssBaseline />
+    <ThemeProvider theme={theme} disableTransitionOnChange>
+      <CssBaseline enableColorScheme />
       <BrowserRouter>
         <Header />
         <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100vh", minWidth: "100vw", marginTop: "64px", overflowY: "auto"}}>
@@ -33,7 +34,7 @@ function App() {
           </Routes>
         </Container>
       </BrowserRouter>
-    </>
+    </ThemeProvider>
   );
 }
 

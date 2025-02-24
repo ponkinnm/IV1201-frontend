@@ -17,6 +17,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: 'column',
   alignSelf: 'center',
   width: '450px',
+  maxWidth: 'min(450px, 90dvw)',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
@@ -48,7 +49,6 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
-
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -57,25 +57,41 @@ export default function SignIn() {
   const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>('');
   const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
 
   const toggleForgotPasswordDialog = () => {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    if (usernameError || passwordError) {
-      event.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // Validate inputs before proceeding
+    if (!validateInputs()) {
       return;
     }
 
-    void navigate('/user');
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        void navigate('/user');
+      } else {
+        setLoginErrorMessage('Login failed. Please check your credentials and try again.');
+      }
+    } catch (error) {
+      console.error('Login request failed:', error);
+    }
   };
 
   const validateInputs = () => {
     let isValid = true;
-
-    /* TODO: Check if username or email is found in the database.*/
     if (!username) {
       setUsernameError(true);
       setUsernameErrorMessage('Please enter a valid email address or username.');
@@ -84,8 +100,6 @@ export default function SignIn() {
       setUsernameError(false);
       setUsernameErrorMessage('');
     }
-
-    /* TODO: Check if password is valid */
     if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
@@ -94,7 +108,6 @@ export default function SignIn() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-
     return isValid;
   };
 
@@ -107,14 +120,11 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
+            onSubmit={(event) => {
+              void handleSubmit(event);
             }}
+            noValidate
+            sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
           >
             <FormControl>
               <FormLabel htmlFor="username">Email or username</FormLabel>
@@ -138,7 +148,7 @@ export default function SignIn() {
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
                 error={passwordError}
-                helperText={passwordErrorMessage}
+                helperText={passwordErrorMessage || loginErrorMessage}
                 name="password"
                 placeholder="••••••"
                 type="password"
@@ -153,7 +163,7 @@ export default function SignIn() {
               />
             </FormControl>
             <ForgotPassword open={showForgotPasswordDialog} handleClose={toggleForgotPasswordDialog} />
-            <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+            <Button type="submit" fullWidth variant="contained">
               Sign in
             </Button>
             <Link

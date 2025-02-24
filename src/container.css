@@ -5,6 +5,7 @@
   justify-content: flex-start;
   width: 100vw;
   background-color: #ffffff;
+  height: 100vh;
 }
 
 .inner-container {
