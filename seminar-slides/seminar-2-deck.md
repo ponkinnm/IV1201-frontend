@@ -44,17 +44,32 @@ VT2025
 - Overall architectural improvement
   - Better separation of concerns
   - Routes, controllers, services, repositories, models
-- Authentication endpoint (login)
+- Authentication + Authorization
+  - JWT tokens, middleware
 - Improved CI workflow
   - Unit tests (Jest)
   - Typechecking (TypeScript)
 - Sequelize ORM
+- Documentation (OpenAPI + JSDoc)
 
 ---
 
 <!-- _header: Frontend -->
 
 - Login view
+
+---
+
+<!-- _header: Tasks completed -->
+
+- (3) Appropriately layered architecture
+- (5) Authentication
+- (6) Authorization
+- (8) CORS
+- (10) Transactions
+- (17) CI/CD Pipeline
+- (24) Different browsers
+- (28) Data migration
 
 [//]: # (> 1: Footnote)
 

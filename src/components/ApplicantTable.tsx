@@ -25,14 +25,13 @@ export default function ApplicantTable() {
   const getApplications = async (): Promise<Applicant[]> => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/applications`, {
-        credentials: 'include'  // This is important for sending cookies
+        credentials: 'include', // This is important for sending cookies
       });
 
-      
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
-  
+
       const data = (await response.json()) as Applicant[];
       return data;
     } catch {
@@ -50,7 +49,7 @@ export default function ApplicantTable() {
   }, []);
 
   return (
-    <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: '900px' }}>
+    <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: 'min(95dvw, 900px)' }}>
       {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
       <DataGrid
         columnHeaderHeight={25}
