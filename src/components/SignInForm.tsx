@@ -55,6 +55,7 @@ export default function SignIn() {
   const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>('');
   const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
 
   const toggleForgotPasswordDialog = () => {
@@ -80,8 +81,7 @@ export default function SignIn() {
       if (response.ok) {
         void navigate('/user');
       } else {
-        //  TODO, SHOW USER THAT THE LOGIN FAILED
-        console.error('Login failed');
+        setLoginErrorMessage('Login failed. Please check your credentials and try again.');
       }
     } catch (error) {
       console.error('Login request failed:', error);
@@ -146,7 +146,7 @@ export default function SignIn() {
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
                 error={passwordError}
-                helperText={passwordErrorMessage}
+                helperText={passwordErrorMessage || loginErrorMessage}
                 name="password"
                 placeholder="••••••"
                 type="password"
