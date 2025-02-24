@@ -35,7 +35,7 @@ interface AvailableTo {
     dateString: string;
 }
 
-export default function ApplicationForm({ submitData}:{submitData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availabilityFrom: Date[], availabilityTo: Date[]) => void}){
+export default function ApplicationForm({ getData: getData }:{ getData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availabilityFrom: Date[], availabilityTo: Date[]) => void}){
     const [id, setId] = useState(1); //Unique id for each input box
     const [competenceRow, setCompetenceRow] = useState<{ id: number, type: "competence"}[]>([{ id: id, type: "competence"}]); //List all rendered CompetencyRow components
     const [availabilityRow, setAvailabilityRow] = useState<{ id: number, type: "date"}[]>([{ id: id, type: "date" }]); //List all rendered DateRow components
@@ -44,11 +44,11 @@ export default function ApplicationForm({ submitData}:{submitData: (competencePr
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
     const [yearsOfExperience, setYearsOfExperience] = useState<Competence[]>([]);
     //Data from date rows
-    const [availabilityFrom, setAvailabilityFrom] = useState<{id: number; from: string}[]>([]);
-    const [availabilityTo, setAvailabilityTo] = useState<{id: number; to: string}[]>([]);
+    const [availabilityFrom, setAvailabilityFrom] = useState<Date[]>([]);
+    const [availabilityTo, setAvailabilityTo] = useState<Date[]>([]);
 
 
-    //Teporarily save currently entered data 
+    //
     const addData = (id: number, target: Competence | AvailableFrom | AvailableTo ) => {
         if("value" in target){
             const newEntry = { id: id, name: target.name, value: target.value };
@@ -80,6 +80,7 @@ export default function ApplicationForm({ submitData}:{submitData: (competencePr
                 );
             }  
         }
+        getData(competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo);
     };
 
     //Remove temporarily stored data
@@ -92,11 +93,6 @@ export default function ApplicationForm({ submitData}:{submitData: (competencePr
             setAvailabilityTo(prev => { return [...prev.filter(item => item.id !== id)]; });
         }
     };
-
-    const submit = () => {
-        submitData(competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo);
-    };
-
 
     //Add up to three rows with input for competence or unlimited rows with input for date.
     const addRow = (type: "competence" | "date") => {
@@ -154,7 +150,6 @@ export default function ApplicationForm({ submitData}:{submitData: (competencePr
                 ))} 
             </Box>               
             <Box sx={{height: 50, width: "100%" }}></Box>
-            <Button onClick={submit}>test</Button>
         </Box>
     );
 }
