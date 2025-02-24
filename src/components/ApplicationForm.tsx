@@ -5,38 +5,66 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import dayjs from 'dayjs';
-import { Button, setRef, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-export default function ApplicationForm({ submitData}:{submitData: (competenceProfileID: any, yearsOfExperience: any, availabilityFrom: any, availabilityTo: any) => void}){
+interface Competence {
+    id: number;
+    name: string;
+    value: string;
+}
+
+interface Date {
+    id: number;
+    from?: string;
+    to?: string;
+}
+
+interface AvailableFrom {
+    type: "date";
+    name: "from_date";
+    dateString: string;
+}
+
+interface AvailableTo {
+    type: "date";
+    name: "to_date";
+    dateString: string;
+}
+
+export default function ApplicationForm({ submitData}:{submitData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availabilityFrom: Date[], availabilityTo: Date[]) => void}){
     const [id, setId] = useState(1); //Unique id for each input box
     const [competenceRow, setCompetenceRow] = useState<{ id: number, type: "competence"}[]>([{ id: id, type: "competence"}]); //List all rendered CompetencyRow components
     const [availabilityRow, setAvailabilityRow] = useState<{ id: number, type: "date"}[]>([{ id: id, type: "date" }]); //List all rendered DateRow components
 
     //Data from competence rows
-    const [competenceProfileID, setCompetenceProfileID] = useState<{id: number; name: string; value: string}[]>([]);
-    const [yearsOfExperience, setYearsOfExperience] = useState<{id: number; name: string; value: string}[]>([]);
+    const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
+    const [yearsOfExperience, setYearsOfExperience] = useState<Competence[]>([]);
     //Data from date rows
     const [availabilityFrom, setAvailabilityFrom] = useState<{id: number; from: string}[]>([]);
     const [availabilityTo, setAvailabilityTo] = useState<{id: number; to: string}[]>([]);
 
 
     //Teporarily save currently entered data 
-    const addData = (id: number, target: any) => {
-        const newEntry = { id: id, name: target.name, value: target.value };
-        if(target.name === "competence_profile_id"){
-            if( !competenceProfileID.some( item =>  item.id === target.id && item.value !== target.value)){ 
-                setCompetenceProfileID(prev => [...prev, newEntry]);
+    const addData = (id: number, target: Competence | AvailableFrom | AvailableTo ) => {
+        if("value" in target){
+            const newEntry = { id: id, name: target.name, value: target.value };
+            if(target.name === "competence_profile_id"){
+                setCompetenceProfileID(prev =>
+                    prev.some(item => item.value === target.value)
+                        ? prev.map(item => (Number(item.id) === id ? newEntry : item))
+                        : [...prev, newEntry]
+                );
+            } else if(target.name === "years_of_experience"){
+                setYearsOfExperience(prev =>
+                    prev.some(item => Number(item.id) === id)
+                        ? prev.map(item => (Number(item.id) === id ? newEntry : item))
+                        : [...prev, newEntry]
+                );
             }
-        } else if(target.name === "years_of_experience"){
-            setYearsOfExperience(prev =>
-                prev.some(item => Number(item.id) === id)
-                    ? prev.map(item => (Number(item.id) === id ? newEntry : item))
-                    : [...prev, newEntry]
-            );
         } else if(target.type === "date"){
             if(target.name === "from_date"){
                 setAvailabilityFrom(prev =>
@@ -142,7 +170,7 @@ export default function ApplicationForm({ submitData}:{submitData: (competencePr
  * @param {function} renderComponent Function that returns the component to be rendered
  * @returns {JSX.Element} DynamicInput
  */
-function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addData, component: component }: { id: number, addRow: () => void, removeRow: (id: number) => void, addData: (id: number, value: any) => void, component: (enableInput: boolean, addData: any) => JSX.Element }){
+function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addData, component: component }: { id: number, addRow: () => void, removeRow: (id: number) => void, addData: (id: number, value: Competence | AvailableFrom | AvailableTo) => void, component: (enableInput: boolean, addData: (id: number, target: Competence | AvailableFrom | AvailableTo) => void) => JSX.Element }){
     const [buttonControl, setButtonControl] = useState(false); //Render an add or remove button
     const [enableInput, setEnableInput] = useState(false); //Enable or disable input boxes
 
@@ -163,7 +191,7 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addDa
  * 
  * @returns {JSX.Element} CompetenceRow
  */
-function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enableInput: boolean, addData: (id: number, value: any) => void; }){
+function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enableInput: boolean, addData: (id: number, value: Competence) => void; }){
     const [competenceProfile, setCompetenceProfile] = useState("");
     const [yearsOfExperience, setYearsOfExperience] = useState("");
 
@@ -178,7 +206,15 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
                     disabled={enableInput}
                     onChange={(event) => {
                         setCompetenceProfile(event.target.value);
-                        addData(id, event.target);
+                        if(event !== null){
+                            const competence: Competence = {
+                                id: id,
+                                name: event.target.name,
+                                value: event.target.value,
+                            };
+                            
+                            addData(id, competence);
+                        }
                     }}
                 >
                     <MenuItem value={1}>Ticket sales</MenuItem>
@@ -195,7 +231,15 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
                 sx={{ minWidth: 200, color:"#1976d2" }} inputProps={{ min: 0, max: 100 }}
                 onChange={(event) => {
                     setYearsOfExperience(event.target.value);
-                    addData(id, event.target);
+                    if(event !== null){
+                        const years: Competence = {
+                            id: id,
+                            name: event.target.name,
+                            value: event.target.value,
+                        };
+                        
+                        addData(id, years);
+                    }
                 }}
             />
         </Box>
@@ -207,9 +251,9 @@ function CompetenceRow({ id, enableInput, addData: addData}: { id: number, enabl
  * 
  * @returns {JSX.Element} DateRow
  */
-function DateRow({ id, enableInput, addData: addData}: { id: number, enableInput: boolean, addData: (id: number, value: any) => void }){
-    const [from, setFrom] = useState(dayjs());
-    const [to, setTo] = useState(dayjs());
+function DateRow({ id, enableInput, addData: addData}: { id: number, enableInput: boolean, addData: (id: number, value: AvailableFrom | AvailableTo) => void }){
+    const [from] = useState(dayjs());
+    const [to] = useState(dayjs());
 
     return(
         <Box sx={{ minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
@@ -224,8 +268,12 @@ function DateRow({ id, enableInput, addData: addData}: { id: number, enableInput
                         sx={{ width: 330 }} 
                         onChange={(event) => {
                             if(event !== null){
-                                const dateString = event.format('YYYY-MM-DD');
-                                addData(id, {type: "date", name: "from_date", dateString});
+                                const availableFrom: AvailableFrom = {
+                                    type: "date",
+                                    name: "from_date",
+                                    dateString: event.format('YYYY-MM-DD'),
+                                };
+                                addData(id, availableFrom);
                             }
                         }}
                     />   
@@ -238,8 +286,12 @@ function DateRow({ id, enableInput, addData: addData}: { id: number, enableInput
                         sx={{ width: 330}} 
                         onChange={(event) => {
                             if(event !== null){
-                                const dateString = event.format('YYYY-MM-DD');
-                                addData(id, {type: "date", name: "to_date", dateString});
+                                const availableFrom: AvailableTo = {
+                                    type: "date",
+                                    name: "to_date",
+                                    dateString: event.format('YYYY-MM-DD'),
+                                };
+                                addData(id, availableFrom);
                             }
                         }}
                     />

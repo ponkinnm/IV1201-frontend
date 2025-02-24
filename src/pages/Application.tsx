@@ -9,11 +9,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
+interface Competence {
+    id: number;
+    name: string;
+    value: string;
+}
+
+interface Date {
+    id: number;
+    from?: string;
+    to?: string;
+}
+
 function Application(){
     const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
 
-    const submitData = (competenceProfileID: any, yearsOfExperience: any, availabilityFrom: any, availabilityTo: any) => {
+    const submitData = (competenceProfileID: Competence[], yearsOfExperience: Competence[], availabilityFrom: Date[], availabilityTo: Date[]) => {
         console.log("SUBMITTED DATA:");
         console.log(competenceProfileID);
         console.log(yearsOfExperience);
