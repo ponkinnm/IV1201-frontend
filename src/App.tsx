@@ -4,7 +4,7 @@ import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import ListApplicants from './pages/ListApplicants.tsx';
-import ViewApplicant from './pages/ApplicationDetails.tsx'; // Update this import
+import ViewApplicant from './pages/ApplicationDetails.tsx'; 
 import LoggedInUser from './pages/LoggedInUser.tsx';
 import { theme } from './theme/theme.ts';
 
