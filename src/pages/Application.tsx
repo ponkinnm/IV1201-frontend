@@ -54,7 +54,7 @@ export default function Application(){
     return(
         <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", minWidth: "750px", minHeight: "100vh"}}>
             <Box sx={{ flex: 1, paddingBottom: "100px", overflowY: "auto", maxHeight: "80vh", paddingRight: "12px"}}>
-                { submitted ? <Box><Typography sx={{display: "flex", justifyContent: "center", alignItems: "center", margin: 4}}>Application submitted!</Typography><Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/></Box> : <ApplicationForm getData={getData}/>}
+                { submitted ? <Box><Typography sx={{display: "flex", justifyContent: "center", alignItems: "center", margin: 4}}>Preview application</Typography><Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/></Box> : <ApplicationForm getData={getData}/>}
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", left: "50%", bottom: "30px", transform: "translateX(-50%)", zIndex: 1000, paddingTop: "20px", paddingBottom: "20px", maxHeight: "90px"}}>
@@ -66,7 +66,7 @@ export default function Application(){
 }
 
 function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
-    const names: { [key: string]: string } = {
+    const names: Record<string, string> = {
         "1": "Ticket sales",
         "2": "Lotteries",
         "3": "Roller coaster operation"
