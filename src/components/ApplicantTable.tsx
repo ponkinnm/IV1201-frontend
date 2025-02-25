@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import { Paper, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Applicant {
   application_id: number;
@@ -19,6 +20,7 @@ const columns = [
 ];
 
 export default function ApplicantTable() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState<Applicant[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -41,12 +43,19 @@ export default function ApplicantTable() {
   };
 
   useEffect(() => {
-    getApplications()
-      .then((applications) => setRows(applications))
-      .catch(() => {
-        console.error('Error getting applications');
-      });
+    void (async () => {
+      try {
+        const applications = await getApplications();
+        setRows(applications);
+      } catch (error) {
+        console.error('Error getting applications:', error);
+      }
+    })();
   }, []);
+
+  const handleRowClick = (params: GridRowParams<Applicant>) => {
+    void navigate(`/applicants/${params.row.application_id}`);
+  };
 
   return (
     <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: 'min(95dvw, 900px)' }}>
@@ -58,6 +67,7 @@ export default function ApplicantTable() {
         columns={columns}
         pageSizeOptions={[10, 25, 50, 100]}
         sx={{ border: 0, height: '100%', overflowY: 'auto' }}
+        onRowClick={handleRowClick}
       />
     </Paper>
   );
