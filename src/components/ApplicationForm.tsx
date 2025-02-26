@@ -301,8 +301,8 @@ function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: {
             setLock(false);
         } else{
             setLock(true);
-        }
-    }, [competenceProfile, yearsOfExperience, id, addData, setLock]);
+        } // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [competenceProfile, yearsOfExperience]);
 
     return(
         <Box sx={{ minWidth: 750, display: "flex", alignItems: "center", gap: 1, height: "100%"}}>
@@ -359,8 +359,8 @@ function DateRow({ id, setLock: setLock, enableInput, addData: addData}: { id: n
             setLock(false);
         } else{
             setLock(true);
-        }
-    }, [from, to, id, addData, setLock]);
+        } // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [from, to]);
 
     return(
         <Box sx={{ minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
