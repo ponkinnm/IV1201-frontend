@@ -5,7 +5,7 @@ function LoggedInUser() {
   const navigate = useNavigate(); //TODO: Used temporary for testing purposes, remove later!
 
   return (
-    <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+    <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: 4}}>
       <Typography>Successful log in!</Typography>
       <Button onClick={() => { void navigate("/applicants") }}>Application list</Button>
       <Button onClick={() => { void navigate("/apply") }}>Create application</Button>

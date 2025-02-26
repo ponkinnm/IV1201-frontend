@@ -24,7 +24,7 @@ function App() {
       <CssBaseline enableColorScheme />
       <BrowserRouter>
         <Header />
-        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100vh", minWidth: "100vw", marginTop: "64px", overflowY: "auto"}}>
+        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "64px", height: "calc(100vh - 64px)", minWidth: "100vw", overflow: "auto" }}>
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/applicants" element={<ListApplicants />}></Route>

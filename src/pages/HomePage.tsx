@@ -4,7 +4,7 @@ import SignInForm from '../components/SignInForm.tsx';
 function HomePage() {
   return (
     
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "100vw", marginTop: 4, overflowY: "auto" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "100vw", marginTop: 4, overflowY: "hidden" }}>
         <Typography variant="h4" component="h1">
           Home
         </Typography>

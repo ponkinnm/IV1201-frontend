@@ -71,8 +71,8 @@ export default function Application(){
     };
     
     return(
-        <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", alignContent:"center", minWidth: "100vw", minHeight: "100vh"}}>
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingBottom: "100px", overflowY: "auto", maxHeight: "80vh"}}>
+        <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", alignContent:"center", minWidth: "100vw" }}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingBottom: "100px", overflow: "auto", maxHeight: "80vh"}}>
                 { submitted ? <Box><Typography sx={{display: "flex", justifyContent: "center", alignItems: "center", margin: 4}}>Preview application</Typography><Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/></Box> : <ApplicationForm getData={getData}/>}
             </Box>
 

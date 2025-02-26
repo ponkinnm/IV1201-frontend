@@ -51,7 +51,7 @@ interface AvailableTo {
  * @param {function} getData A reference to the parent component that will recieve the entered data. 
  * @returns {JSX.Element} ApplicationForm
  */
-export default function ApplicationForm({ getData: getData }:{ getData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availabilityFrom: AvailabilityDate[], availabilityTo: AvailabilityDate[]) => void}){
+export default function ApplicationForm({ getData: getData }:{ getData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availableFrom: AvailabilityDate[], availableTo: AvailabilityDate[]) => void}){
     const [id] = useState(Date.now()); //Unique id for each input box
     const [lock, setLock] = useState(true); //Locks add button from adding data until all input boxes on the row have been filled out.
     const [competenceRow, setCompetenceRow] = useState<{ id: number, type: "competence"}[]>([{ id: id, type: "competence"}]); //List all rendered CompetencyRow components
@@ -66,12 +66,8 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
     const [yearsOfExperience, setYearsOfExperience] = useState<Competence[]>([]);
     //Data from date rows
-    const [availabilityFrom, setAvailabilityFrom] = useState<AvailabilityDate[]>([]);
-    const [availabilityTo, setAvailabilityTo] = useState<AvailabilityDate[]>([]);
-
-   /* TODO: useEffect(() => {
-        checkInput("competence");
-    }, [competenceProfileID, yearsOfExperience]);*/
+    const [availableFrom, setAvailableFrom] = useState<AvailabilityDate[]>([]);
+    const [availableTo, setAvailableTo] = useState<AvailabilityDate[]>([]);
 
     //Save currently entered data using the hooks.
     const addData = (id: number, target: Competence | AvailableFrom | AvailableTo ) => {
@@ -92,20 +88,20 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
             }
         } else if(target.type === "date"){
             if(target.name === "from_date"){
-                setAvailabilityFrom(prev =>
+                setAvailableFrom(prev =>
                     prev.some(item => item.id === id)
                         ? prev.map(item => item.id === id ? {id, from: target.dateString} : item)
                         : [...prev, {id, from: target.dateString}]
                 );
             } else if(target.name === "to_date"){
-                setAvailabilityTo(prev =>
+                setAvailableTo(prev =>
                     prev.some(item => item.id === id)
                         ? prev.map(item => item.id === id ? {id, to: target.dateString} : item)
                         : [...prev, {id, to: target.dateString}]
                 );
             }  
         }
-        getData(competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo);
+        getData(competenceProfileID, yearsOfExperience, availableFrom, availableTo);
     };
 
     /**
@@ -119,8 +115,8 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
             setCompetenceProfileID(prev => { return [...prev.filter(item => item.id !== id)]; });
             setYearsOfExperience(prev => { return [...prev.filter(item => item.id !== id)]; });
         } else if(type === "date"){
-            setAvailabilityFrom(prev => { return [...prev.filter(item => item.id !== id)]; });
-            setAvailabilityTo(prev => { return [...prev.filter(item => item.id !== id)]; });
+            setAvailableFrom(prev => { return [...prev.filter(item => item.id !== id)]; });
+            setAvailableTo(prev => { return [...prev.filter(item => item.id !== id)]; });
         }
     };
  
@@ -153,52 +149,51 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
      * @returns false if input is wrong and a new row shouldn't be rendered, otherwise true which will render a new row
      */
     const checkInput = (type: "competence" | "date") => {
-        console.log(lock);
-        if(type === "competence" && lock){
-            /*
-            if((competenceProfileID.length !== yearsOfExperience.length 
-                || (competenceProfileID.length === yearsOfExperience.length && !competenceProfileID.some(comp => yearsOfExperience.some(exp => comp.id === exp.id))))){
-                setCompetenceError(true); //Display error for competency rows
-                console.log("no matching competence id");
+        if(type === "competence"){
+            if(competenceProfileID.length !== yearsOfExperience.length){ 
+                setErrorMessage("This competence has already been entered!"); //User tried to add the same competence twice
+                setCompetenceError(true);
                 return false;
-            } */
-            console.log(competenceProfileID);
-            console.log(yearsOfExperience);
-            //Check not unique on competence
-            //check years of experience is larger than 0 
-            //Check both boxes are filled out
-            //if(yearsOfExperience.some(exp => Number(exp.value) < 0 )){ setErrorMessage("Please enter a higher number for years of experience!"); }
-            console.log(competenceProfileID.some(comp => competenceProfileID.some(com => comp.value === com.value)));
-            if(competenceProfileID.some(comp => competenceProfileID.some(com => comp.value === com.value))){ setErrorMessage("This competence has already been entered!"); }
-            else{ setErrorMessage("Please fill out all required fields!"); }
-            setCompetenceError(true);
-            
-            return false;
-        } else if(type === "date" && lock){
-           /* if((availabilityFrom.length !== availabilityTo.length 
-                || (availabilityFrom.length === availabilityTo.length && !availabilityFrom.some(from => availabilityTo.some(to => from.id === to.id))))){
-                setDateError(true); //Display error for date rows
-                console.log("no matching date id");
+            } else if(lock){
+                setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
+                setCompetenceError(true);
                 return false;
-            }*/
-
-            //check both filled out
-            //check from date is before to date
-            //
-            setDateError(true);
-            setErrorMessage("TEST B");
-            return false;
+            }
+        } else if(type === "date"){
+            const today = getTodaysDate();
+            if(availableFrom.some(date => date.from !== undefined && date.from < today) || availableTo.some(date => date.to !== undefined && date.to < today)){
+                setErrorMessage("The selected date cannot be in the past. Please choose a valid date!"); //User entered a date that lies in the past
+                setDateError(true);
+                return false;
+            }
+            else if(availableFrom.some(fromDate => availableTo.some(toDate => toDate.to !== undefined && fromDate.from !== undefined && (fromDate.from > toDate.to && fromDate.from !== toDate.to)))){ 
+                setErrorMessage("The To date must be later than or the same as the From date!"); //User entered a to date that comes before the from date
+                setDateError(true);
+                return false;
+            } else if(lock){ //Check that all input fields have been filled out
+                setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
+                setDateError(true);
+                return false;
+            }
         }
-
-        console.log("All systems are go");
-       // console.log(competenceProfileID.length !== yearsOfExperience.length || !competenceProfileID.some(comp => yearsOfExperience.some(exp => comp.id === exp.id)));
-        console.log(competenceProfileID);
-        console.log(yearsOfExperience);
-        setDateError(false); //Hide error
-        setCompetenceError(false); //Hide error
+        setDateError(false); //Hide date row error
+        setCompetenceError(false); //Hide competence row error
         return true;
     }
     
+    /**
+     * Get todays date.
+     * 
+     * @returns todays date as a string "YYYY-MM-DD"
+     */
+    const getTodaysDate = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     /**
      * Remove a row from the form. Data will also be removed by calling removeData function.
      * 
@@ -224,8 +219,8 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     };
 
     return(
-        <Box sx={{ minHeight: "100vh", marginTop: 4}}>
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "start"}}>
+        <Box sx={{ minHeight: "calc(100vh-64px)"}}>
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>
                 <Typography variant="h4">Application</Typography>
             </Box>
             <Box sx={{display: "flex", flexDirection: "column", marginTop: "50px"}}>
@@ -300,14 +295,14 @@ function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: {
             addData(id, { id: id, name: "years_of_experience", value: Number(yearsOfExperience) });
             setLock(false);
         } else{
-            setLock(true);
+            setLock(true); //Lock until both input field have been filled out
         } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competenceProfile, yearsOfExperience]);
 
     return(
         <Box sx={{ minWidth: 750, display: "flex", alignItems: "center", gap: 1, height: "100%"}}>
             <FormControl fullWidth>
-                <InputLabel>Competence</InputLabel>
+                <InputLabel>Select a competence</InputLabel>
                 <Select
                     id={`${id}`}
                     name={"competence_profile_id"}
@@ -358,7 +353,7 @@ function DateRow({ id, setLock: setLock, enableInput, addData: addData}: { id: n
             addData(id, { type: "date", name: "to_date", dateString: to.format('YYYY-MM-DD')});
             setLock(false);
         } else{
-            setLock(true);
+            setLock(true); //Lock until both input fields have been filled out
         } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from, to]);
 

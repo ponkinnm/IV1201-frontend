@@ -49,7 +49,7 @@ export default function ApplicantTable() {
   }, []);
 
   return (
-    <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: 'min(95dvw, 900px)' }}>
+    <Paper elevation={2} sx={{ height: '90%', width: '100%', maxWidth: 'min(95dvw, 900px)', marginTop: 4}}>
       {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
       <DataGrid
         columnHeaderHeight={25}
