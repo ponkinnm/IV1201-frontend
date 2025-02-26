@@ -162,14 +162,14 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 console.log("no matching competence id");
                 return false;
             } */
-
+            console.log(competenceProfileID);
+            console.log(yearsOfExperience);
             //Check not unique on competence
             //check years of experience is larger than 0 
             //Check both boxes are filled out
-            console.log("yoe");
-            console.log(yearsOfExperience.map(exp => exp.value));
-            if(yearsOfExperience.some(exp => Number(exp.value) < 0 )){ setErrorMessage("Please enter a higher number for years of experience!"); }
-            else if(competenceProfileID.some(comp => competenceProfileID.some(com => comp.id === com.id))){ setErrorMessage("This competence has already been entered!"); }
+            //if(yearsOfExperience.some(exp => Number(exp.value) < 0 )){ setErrorMessage("Please enter a higher number for years of experience!"); }
+            console.log(competenceProfileID.some(comp => competenceProfileID.some(com => comp.value === com.value)));
+            if(competenceProfileID.some(comp => competenceProfileID.some(com => comp.value === com.value))){ setErrorMessage("This competence has already been entered!"); }
             else{ setErrorMessage("Please fill out all required fields!"); }
             setCompetenceError(true);
             
@@ -296,8 +296,8 @@ function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: {
 
     useEffect(() => {
         if (competenceProfile !== "" && yearsOfExperience !== ""){
-            addData(id, { id: id, name: "competence_profile_id", value: 1 });
-            addData(id, { id: id, name: "years_of_experience", value: 1});
+            addData(id, { id: id, name: "competence_profile_id", value: Number(competenceProfile) });
+            addData(id, { id: id, name: "years_of_experience", value: Number(yearsOfExperience) });
             setLock(false);
         } else{
             setLock(true);
@@ -334,7 +334,7 @@ function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: {
                 variant={"outlined"}
                 sx={{ minWidth: 200, color:"#1976d2" }} 
                 onChange={(event) => {
-                    if(event !== null){
+                    if(event !== null && event.target.value !== "0"){
                         setYearsOfExperience(event.target.value);
                     }
                 }}
