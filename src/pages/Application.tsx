@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 interface Competence {
     id: number;
     name: string;
-    value: string;
+    value: number;
 }
 
 //Date has either from or to fields but not both at the same time.
@@ -40,20 +40,39 @@ export default function Application(){
         setAvailabilityTo(currentAvailabilityTo);
     };
 
+    /* eslint-disable */
+    const previewData = () => {
+        //TODO: Implement a preview page that list all input
+        submitData();
+        //Filter out competences that doesn't have a matching years of experience entered. Based on matching ids. 
+        const commonCompExp = competenceProfileID.filter(comp => yearsOfExperience.some(exp => exp.id === comp.id));
+        setCompetenceProfileID(comp => comp.filter(value => commonCompExp.includes(value)));
+        setYearsOfExperience(exp => exp.filter(value => commonCompExp.includes(value)));
+
+        //Filter out from dates that doesn't have a matching to dates. Based on matching ids. 
+        const commondates = availabilityFrom.filter(from => availabilityTo.some(to => to.id === from.id));
+        setAvailabilityFrom(from => from.filter(value => commondates.includes(value)));
+        setAvailabilityTo(to => to.filter(value => commondates.includes(value)));
+        submitData();
+    }
+    /* eslint-enable */
+
     const submitData = () => {
-
-        //TODO: Data should be sent to database here!
-
-        console.log("SUBMITTED DATA:");
-        console.log(competenceProfileID);
-        console.log(yearsOfExperience);
-        console.log(availabilityFrom);
-        console.log(availabilityTo);
+        try{
+            //TODO: Data should be sent to database here!
+            console.log("SUBMITTED DATA:");
+            console.log(competenceProfileID);
+            console.log(yearsOfExperience);
+            console.log(availabilityFrom);
+            console.log(availabilityTo);
+        } catch{
+            throw new Error("Not Implemented");
+        }
     };
     
     return(
-        <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", minWidth: "750px", minHeight: "100vh"}}>
-            <Box sx={{ flex: 1, paddingBottom: "100px", overflowY: "auto", maxHeight: "80vh", paddingRight: "12px"}}>
+        <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", alignContent:"center", minWidth: "100vw", minHeight: "100vh"}}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingBottom: "100px", overflowY: "auto", maxHeight: "80vh"}}>
                 { submitted ? <Box><Typography sx={{display: "flex", justifyContent: "center", alignItems: "center", margin: 4}}>Preview application</Typography><Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/></Box> : <ApplicationForm getData={getData}/>}
             </Box>
 
