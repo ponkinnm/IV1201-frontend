@@ -53,7 +53,9 @@ interface AvailableTo {
  */
 export default function ApplicationForm({ getData: getData }:{ getData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availableFrom: AvailabilityDate[], availableTo: AvailabilityDate[]) => void}){
     const [id] = useState(Date.now()); //Unique id for each input box
-    const [lock, setLock] = useState(true); //Locks add button from adding data until all input boxes on the row have been filled out.
+    const [competenceLock, setCompetenceLock] = useState(true); //Locks add button from adding competence until all input boxes on the row have been filled out.
+    const [dateLock, setDateLock] = useState(true); //Locks add button from adding a date until all input boxes on the row have been filled out.
+
     const [competenceRow, setCompetenceRow] = useState<{ id: number, type: "competence"}[]>([{ id: id, type: "competence"}]); //List all rendered CompetencyRow components
     const [availabilityRow, setAvailabilityRow] = useState<{ id: number, type: "date"}[]>([{ id: id, type: "date" }]); //List all rendered DateRow components
     
@@ -68,6 +70,10 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     //Data from date rows
     const [availableFrom, setAvailableFrom] = useState<AvailabilityDate[]>([]);
     const [availableTo, setAvailableTo] = useState<AvailabilityDate[]>([]);
+
+    useEffect(() => {
+        getData(competenceProfileID, yearsOfExperience, availableFrom, availableTo);
+    },[competenceProfileID, yearsOfExperience, availableFrom, availableTo]);
 
     //Save currently entered data using the hooks.
     const addData = (id: number, target: Competence | AvailableFrom | AvailableTo ) => {
@@ -101,7 +107,6 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 );
             }  
         }
-        getData(competenceProfileID, yearsOfExperience, availableFrom, availableTo);
     };
 
     /**
@@ -154,7 +159,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 setErrorMessage("This competence has already been entered!"); //User tried to add the same competence twice
                 setCompetenceError(true);
                 return false;
-            } else if(lock){
+            } else if(competenceLock){
                 setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
                 setCompetenceError(true);
                 return false;
@@ -166,11 +171,11 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 setDateError(true);
                 return false;
             }
-            else if(availableFrom.some(fromDate => availableTo.some(toDate => toDate.to !== undefined && fromDate.from !== undefined && (fromDate.from > toDate.to && fromDate.from !== toDate.to)))){ 
+            else if(availableFrom.some(fromDate => availableTo.some(toDate => fromDate.id === toDate.id && toDate.to !== undefined && fromDate.from !== undefined && (new Date(fromDate.from) > new Date (toDate.to) && fromDate.from !== toDate.to)))){ 
                 setErrorMessage("The To date must be later than or the same as the From date!"); //User entered a to date that comes before the from date
                 setDateError(true);
                 return false;
-            } else if(lock){ //Check that all input fields have been filled out
+            } else if(dateLock){ //Check that all input fields have been filled out
                 setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
                 setDateError(true);
                 return false;
@@ -220,9 +225,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
 
     return(
         <Box sx={{ minHeight: "calc(100vh-64px)"}}>
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>
-                <Typography variant="h4">Application</Typography>
-            </Box>
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>Application</Typography>
             <Box sx={{display: "flex", flexDirection: "column", marginTop: "50px"}}>
                 <Typography sx={{marginLeft: 1}}>Select up to three competencies and provide your years of experience.</Typography>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competence to your application.</Typography>
@@ -230,7 +233,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                     {competenceError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
                 </Box>
                 {competenceRow.map((row)=>(
-                    <DynamicInput key={`competence-${row.id}`} id={row.id} addRow={() => addRow("competence")} removeRow={() => removeRow(row.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={row.id} enableInput={enableInput} addData={addData} setLock={setLock}/>}/>
+                    <DynamicInput key={`competence-${row.id}`} id={row.id} addRow={() => addRow("competence")} removeRow={() => removeRow(row.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={row.id} enableInput={enableInput} addData={addData} setCompetenceLock={setCompetenceLock}/>}/>
                 ))}
                 <Typography sx={{marginLeft: 1, marginTop: "50px"}}>Please provide the dates for the periods you are available to work.</Typography>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the date to your application.</Typography>
@@ -238,7 +241,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                     {dateError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
                 </Box>
                 {availabilityRow.map((row)=>( 
-                    <DynamicInput key={`date-${row.id}`} id={row.id} addRow={() => addRow("date")} removeRow={() => removeRow(row.id, "date")} addData={addData} component={(enableInput: boolean) => <DateRow id = {row.id} enableInput={enableInput} addData={addData} setLock={setLock}/>}/>
+                    <DynamicInput key={`date-${row.id}`} id={row.id} addRow={() => addRow("date")} removeRow={() => removeRow(row.id, "date")} addData={addData} component={(enableInput: boolean) => <DateRow id = {row.id} enableInput={enableInput} addData={addData} setDateLock={setDateLock}/>}/>
                 ))} 
             </Box>               
             <Box sx={{height: 50, width: "100%" }}></Box>
@@ -285,17 +288,17 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addDa
  * 
  * @returns {JSX.Element} CompetenceRow
  */
-function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: { id: number, setLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: Competence) => void; }){
+function CompetenceRow({ id, setCompetenceLock: setCompetenceLock, enableInput, addData: addData}: { id: number, setCompetenceLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: Competence) => void; }){
     const [competenceProfile, setCompetenceProfile] = useState("");
     const [yearsOfExperience, setYearsOfExperience] = useState("");
 
     useEffect(() => {
         if (competenceProfile !== "" && yearsOfExperience !== ""){
+            setCompetenceLock(false);
             addData(id, { id: id, name: "competence_profile_id", value: Number(competenceProfile) });
             addData(id, { id: id, name: "years_of_experience", value: Number(yearsOfExperience) });
-            setLock(false);
         } else{
-            setLock(true); //Lock until both input field have been filled out
+            setCompetenceLock(true); //Lock until both input field have been filled out
         } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [competenceProfile, yearsOfExperience]);
 
@@ -343,17 +346,17 @@ function CompetenceRow({ id, setLock: setLock, enableInput, addData: addData}: {
  * 
  * @returns {JSX.Element} DateRow
  */
-function DateRow({ id, setLock: setLock, enableInput, addData: addData}: { id: number, setLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: AvailableFrom | AvailableTo) => void }){
+function DateRow({ id, setDateLock: setDateLock, enableInput, addData: addData}: { id: number, setDateLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: AvailableFrom | AvailableTo) => void }){
     const [from, setFrom] = useState<Dayjs | null>(null);
     const [to, setTo] = useState<Dayjs | null>(null);
 
     useEffect(() => {
         if(from !== null && to !== null){
+            setDateLock(false);
             addData(id, { type: "date", name: "from_date", dateString: from.format('YYYY-MM-DD')});
             addData(id, { type: "date", name: "to_date", dateString: to.format('YYYY-MM-DD')});
-            setLock(false);
         } else{
-            setLock(true); //Lock until both input fields have been filled out
+            setDateLock(true); //Lock until both input fields have been filled out
         } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from, to]);
 

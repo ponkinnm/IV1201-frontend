@@ -5,9 +5,11 @@
 import '../container.css';
 import ApplicationForm from '../components/ApplicationForm.tsx';
 import { Typography, Button } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+
 
 interface Competence {
     id: number;
@@ -24,7 +26,8 @@ interface Date {
 
 export default function Application(){
     const navigate = useNavigate();
-    const [submitted, setSubmitted] = useState(false); //Decide which view to render
+    const [showPreview, setShowPreview] = useState(false); //Show preview
+    const [submit, setSubmit] = useState(false);
 
     //Data from competence rows
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
@@ -40,31 +43,18 @@ export default function Application(){
         setAvailabilityTo(currentAvailabilityTo);
     };
 
-    /* eslint-disable */
     const previewData = () => {
-        //TODO: Implement a preview page that list all input
-        submitData();
-        //Filter out competences that doesn't have a matching years of experience entered. Based on matching ids. 
-        const commonCompExp = competenceProfileID.filter(comp => yearsOfExperience.some(exp => exp.id === comp.id));
-        setCompetenceProfileID(comp => comp.filter(value => commonCompExp.includes(value)));
-        setYearsOfExperience(exp => exp.filter(value => commonCompExp.includes(value)));
-
-        //Filter out from dates that doesn't have a matching to dates. Based on matching ids. 
-        const commondates = availabilityFrom.filter(from => availabilityTo.some(to => to.id === from.id));
-        setAvailabilityFrom(from => from.filter(value => commondates.includes(value)));
-        setAvailabilityTo(to => to.filter(value => commondates.includes(value)));
-        submitData();
+        //TODO: Remove this function, only for testing
+        console.log("SUBMITTED DATA:");
+        console.log(competenceProfileID);
+        console.log(yearsOfExperience);
+        console.log(availabilityFrom);
+        console.log(availabilityTo);
     }
-    /* eslint-enable */
 
     const submitData = () => {
         try{
             //TODO: Data should be sent to database here!
-            console.log("SUBMITTED DATA:");
-            console.log(competenceProfileID);
-            console.log(yearsOfExperience);
-            console.log(availabilityFrom);
-            console.log(availabilityTo);
         } catch{
             throw new Error("Not Implemented");
         }
@@ -73,38 +63,80 @@ export default function Application(){
     return(
         <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", alignContent:"center", minWidth: "100vw" }}>
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingBottom: "100px", overflow: "auto", maxHeight: "80vh"}}>
-                { submitted ? <Box><Typography sx={{display: "flex", justifyContent: "center", alignItems: "center", margin: 4}}>Preview application</Typography><Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/></Box> : <ApplicationForm getData={getData}/>}
+                { submit ? <Confirmation /> : showPreview ? <Preview previewData={previewData} competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/> : <ApplicationForm getData={getData}/>}
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", left: "50%", bottom: "30px", transform: "translateX(-50%)", zIndex: 1000, paddingTop: "20px", paddingBottom: "20px", maxHeight: "90px"}}>
-                <Button  onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>Cancel</Button>
-                { !submitted ? <Button onClick={() => {setSubmitted(!submitted)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Preview & Submit</Button> : <Button onClick={()=>{submitData()}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Submit</Button>}
+                { !submit && <Button  onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>Cancel</Button>}
+                { !showPreview ? <Button onClick={() => {setShowPreview(!showPreview)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Preview & Submit</Button> : !submit && <Button onClick={()=>{submitData(); setSubmit(true)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Submit</Button>}
             </Box>
         </Box>
     );
 }
 
-function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
+function Preview({ previewData: previewData, competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { previewData: () => void, competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
     const names: Record<string, string> = {
         "1": "Ticket sales",
         "2": "Lotteries",
         "3": "Roller coaster operation"
     }
+    previewData();
     return(
         <Box>
-            {competenceProfileID.map(item => (
-                <Typography key={item.id}>{`competenceID: ${item.id}, value: ${names[item.value]}`}</Typography>
-            ))}
-            {yearsOfExperience.map(item => (
-                <Typography key={item.id}>{`yearsOfExperienceID: ${item.id}, value: ${item.value}`}</Typography>
-            ))}
-            {availabilityFrom.map(item => (
-                <Typography key={item.id}>{`dateFromID: ${item.id}, From: ${item.from}`}</Typography>
-            ))}
-            {availabilityTo.map(item => (
-                <Typography key={item.id}>{`DateToID: ${item.id}, To: ${item.to}`}</Typography>
-            ))}
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>Preview</Typography>
+            <Typography variant="h5" sx={{ marginTop: 4}}>Entered competencies</Typography>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>Competence</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>Years of experience</Typography></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {competenceProfileID.map(comp => (yearsOfExperience.map(exp => 
+                        comp.id === exp.id && (
+                            <TableRow>
+                                <TableCell>{`${names[comp.value]}`}</TableCell>
+                                <TableCell>{`${exp.value} years`}</TableCell>
+                            </TableRow>
+                        ))))
+                    }
+                </TableBody>
+            </Table>
+            <Typography variant="h5" sx={{ marginTop: 4}}>Entered date periods</Typography>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>From</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>To</Typography></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {availabilityFrom.map(from => (availabilityTo.map(to => 
+                        from.id === to.id && (
+                            <TableRow>
+                                <TableCell>{`${from.from}`}</TableCell>
+                                <TableCell>{`${to.to}`}</TableCell>
+                            </TableRow>
+                        ))))
+                    }
+                </TableBody>
+            </Table>
         </Box>
     );
 
+}
+
+function Confirmation(){
+    const navigate = useNavigate();
+    return(
+        <Box sx={{display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", minHeight: "100%"}}>
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 6}}>Thank You for Your Application!</Typography>
+            <Typography sx={{marginTop: 6}}>Your application has been successfully submitted.</Typography>
+            <Typography>Our team at Theme Park Careers will review your information,</Typography>
+            <Typography>and if your qualifications match our openings, we will be in touch.</Typography>
+            <Typography>We appreciate your interest and look forward to the possibility of working together!</Typography>
+            <Button onClick={() => {void navigate("/user")}} sx={{ backgroundColor: "#1976d2", color: "white", marginTop: 6}}>Return to user page</Button>
+        </Box>
+    );
 }
