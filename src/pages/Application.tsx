@@ -30,7 +30,7 @@ export default function Application(){
     const navigate = useNavigate();
     const [showPreview, setShowPreview] = useState(false); //Show preview page
     const [submit, setSubmit] = useState(false); //Show "application successfully submitted" page
-
+   
     //Data from competence rows
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
     const [yearsOfExperience, setYearsOfExperience] = useState<Competence[]>([]);
@@ -45,11 +45,45 @@ export default function Application(){
         setAvailabilityTo(currentAvailabilityTo);
     };
 
-    const submitData = () => {
+    const submitData = async () => {
+        //TODO Error handling and input validation
         try{
-            //TODO: Data should be sent to database here!
-        } catch{
-            throw new Error("Not Implemented");
+            // Format the competence data for the API
+            const competenceProfile = competenceProfileID.map((comp, index) => ({
+                competence_id: comp.value,
+                years_of_experience: yearsOfExperience[index]?.value || 0
+            }));
+
+            // Format the availability data for the API
+            const availabilities = availabilityFrom.map((fromDate) => {
+                const toDate = availabilityTo.find(item => item.id === fromDate.id);
+                return {
+                    from_date: fromDate.from,
+                    to_date: toDate?.to
+                };
+            });
+
+            // Call the API to submit the application
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    competenceProfile,
+                    availabilities
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit application');
+            }
+
+            setSubmit(true);
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            // TODO Error handling
         }
     };
     
@@ -60,8 +94,17 @@ export default function Application(){
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", left: "50%", bottom: "30px", transform: "translateX(-50%)", zIndex: 1000, paddingTop: "20px", paddingBottom: "20px", maxHeight: "90px"}}>
-                { !submit && <Button  onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>Cancel</Button>}
-                { !showPreview ? <Button onClick={() => {setShowPreview(!showPreview)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Preview & Submit</Button> : !submit && <Button onClick={()=>{submitData(); setSubmit(true)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Submit</Button>}
+                { !submit && <Button onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>Cancel</Button>}
+                { !showPreview 
+                    ? <Button onClick={() => {setShowPreview(!showPreview)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Preview & Submit</Button> 
+                    : !submit && 
+                    <Button 
+                      onClick={() => {void submitData()}} 
+                      sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}                  
+                    >
+                      Submit
+                    </Button>
+                }
             </Box>
         </Box>
     );
@@ -93,7 +136,7 @@ function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, ava
                 <TableBody>
                     {competenceProfileID.map(comp => (yearsOfExperience.map(exp => 
                         comp.id === exp.id && (
-                            <TableRow>
+                            <TableRow key={comp.id}>
                                 <TableCell>{`${names[comp.value]}`}</TableCell>
                                 <TableCell>{`${exp.value} years`}</TableCell>
                             </TableRow>
@@ -112,7 +155,7 @@ function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, ava
                 <TableBody>
                     {availabilityFrom.map(from => (availabilityTo.map(to => 
                         from.id === to.id && (
-                            <TableRow>
+                            <TableRow key={from.id}>
                                 <TableCell>{`${from.from}`}</TableCell>
                                 <TableCell>{`${to.to}`}</TableCell>
                             </TableRow>
