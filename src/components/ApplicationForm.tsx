@@ -73,6 +73,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
 
     useEffect(() => {
         getData(competenceProfileID, yearsOfExperience, availableFrom, availableTo);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[competenceProfileID, yearsOfExperience, availableFrom, availableTo]);
 
     //Save currently entered data using the hooks.

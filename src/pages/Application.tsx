@@ -1,11 +1,13 @@
 /**
  * Page where users of role applicant can fill out an application and submit it.
- * The user 
+ * The user is greeted by a form where they can fill out their competencies, years of experience and the dates they are availiable to work.
+ * When the form is filled out it can be previewed by clicking the "Preview & Submit" button.
+ * The form is then submitted by clicking the submit button on the preview page.
  */
 import '../container.css';
 import ApplicationForm from '../components/ApplicationForm.tsx';
 import { Typography, Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
@@ -26,8 +28,8 @@ interface Date {
 
 export default function Application(){
     const navigate = useNavigate();
-    const [showPreview, setShowPreview] = useState(false); //Show preview
-    const [submit, setSubmit] = useState(false);
+    const [showPreview, setShowPreview] = useState(false); //Show preview page
+    const [submit, setSubmit] = useState(false); //Show "application successfully submitted" page
 
     //Data from competence rows
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
@@ -74,6 +76,11 @@ export default function Application(){
     );
 }
 
+/**
+ * Component that show a preview of all information entered by the user.
+ * 
+ * @returns {JSX.Element} Preview
+ */
 function Preview({ previewData: previewData, competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { previewData: () => void, competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
     const names: Record<string, string> = {
         "1": "Ticket sales",
@@ -127,6 +134,11 @@ function Preview({ previewData: previewData, competenceProfileID, yearsOfExperie
 
 }
 
+/**
+ * Displays a message to the user that the application have been submitted.
+ * 
+ * @returns {JSX.Element} Confirmation
+ */
 function Confirmation(){
     const navigate = useNavigate();
     return(
