@@ -45,15 +45,6 @@ export default function Application(){
         setAvailabilityTo(currentAvailabilityTo);
     };
 
-    const previewData = () => {
-        //TODO: Remove this function, only for testing
-        console.log("SUBMITTED DATA:");
-        console.log(competenceProfileID);
-        console.log(yearsOfExperience);
-        console.log(availabilityFrom);
-        console.log(availabilityTo);
-    }
-
     const submitData = () => {
         try{
             //TODO: Data should be sent to database here!
@@ -65,7 +56,7 @@ export default function Application(){
     return(
         <Box sx={{display: "flex", flexDirection: "column", justifyItems: "center", alignContent:"center", minWidth: "100vw" }}>
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", paddingBottom: "100px", overflow: "auto", maxHeight: "80vh"}}>
-                { submit ? <Confirmation /> : showPreview ? <Preview previewData={previewData} competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/> : <ApplicationForm getData={getData}/>}
+                { submit ? <Confirmation /> : showPreview ? <Preview competenceProfileID={competenceProfileID} yearsOfExperience={yearsOfExperience} availabilityFrom={availabilityFrom} availabilityTo={availabilityTo}/> : <ApplicationForm getData={getData}/>}
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", left: "50%", bottom: "30px", transform: "translateX(-50%)", zIndex: 1000, paddingTop: "20px", paddingBottom: "20px", maxHeight: "90px"}}>
@@ -81,13 +72,13 @@ export default function Application(){
  * 
  * @returns {JSX.Element} Preview
  */
-function Preview({ previewData: previewData, competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { previewData: () => void, competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
+function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
     const names: Record<string, string> = {
         "1": "Ticket sales",
         "2": "Lotteries",
         "3": "Roller coaster operation"
     }
-    previewData();
+
     return(
         <Box>
             <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>Preview</Typography>
