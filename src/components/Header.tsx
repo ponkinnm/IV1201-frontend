@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <AppBar position="sticky" sx={{ width: '100dvw' }}>
+    <AppBar position="fixed" sx={{ width: '100dvw' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Link to="/">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

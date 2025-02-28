@@ -20,7 +20,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   maxWidth: 'min(450px, 90dvw)',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  marginTop: '25%',
+marginTop: '25%',
   boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   ...theme.applyStyles('dark', {
     boxShadow: 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
@@ -29,7 +29,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
+  minHeight: '100vh',
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
@@ -110,7 +110,7 @@ export default function SignIn() {
   };
 
   return (
-    <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: 2 }}>
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
@@ -184,6 +184,6 @@ export default function SignIn() {
           </Box>
         </Card>
       </SignInContainer>
-    </div>
+    </Box>
   );
 }
