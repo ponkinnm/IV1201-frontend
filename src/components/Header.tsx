@@ -1,6 +1,6 @@
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { Attractions } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 function Header() {
   return (

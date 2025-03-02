@@ -8,6 +8,7 @@ import ViewApplicant from './pages/ApplicationDetails.tsx';
 import LoggedInUser from './pages/LoggedInUser.tsx';
 import Application from './pages/Application.tsx';
 import { theme } from './theme/theme.ts';
+import SignUp from './pages/SignUp.tsx';
 
 /**
  * Routes to the following views:
@@ -32,6 +33,7 @@ function App() {
              <Route path="/applicants/:application_id" element={<ViewApplicant />} />
             <Route path="/user" element={<LoggedInUser />}></Route>
             <Route path="/apply" element={<Application />}></Route>
+            <Route path ="/signup" element={<SignUp />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
         </Container>

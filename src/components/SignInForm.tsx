@@ -70,6 +70,8 @@ export default function SignIn() {
       return;
     }
 
+    // 
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
@@ -177,7 +179,8 @@ export default function SignIn() {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
-              <Link href="/material-ui/getting-started/templates/sign-in/ody2" sx={{ alignSelf: 'center' }}>
+              <Link component="button"
+              type="button" onClick={() => { void navigate("/signup") }} sx={{ alignSelf: 'center' }}>
                 Sign up
               </Link>
             </Typography>
