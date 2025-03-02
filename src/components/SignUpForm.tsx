@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { type FormEvent, useState } from 'react';
+import { useState } from 'react';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -55,7 +55,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp(props: { disableCustomTheme?: boolean }) {
+export default function SignUp() {
   
     const navigate = useNavigate();
 
@@ -165,11 +165,9 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   
         if (response.ok) {
           void navigate('/user');
-        } else {
-          setSignUpErrorMessage('Login failed. Please check your credentials and try again.');
         }
       } catch (error) {
-        console.error('Login request failed:', error);
+        console.error('sign up request failed:', error);
       }
 
     console.log({
@@ -188,12 +186,12 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={() => handleSubmit()}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           > 
             <Box
-              component="form"
-              onSubmit={handleSubmit}
+              component="form" 
+              onSubmit={() => handleSubmit()}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
@@ -229,7 +227,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               </Box>
             <Box
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={() => handleSubmit()}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
