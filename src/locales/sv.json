@@ -1,0 +1,135 @@
+{
+    "Header": {
+
+    },
+
+    "HomePage": {
+        "headline": "Hem",
+        "welcome_msg": "Välkommen till Theme park careers!",
+        "action_msg": "Logga in  eller skapa ett nytt konto"
+    },
+    
+    "SignInForm": {
+        "sign_in": "Logga in",
+        "label_1": "Epost eller användarnamn",
+        "placeholder_1": "din@epost.se",
+        "label_2": "Lösenord",
+        "button": "Logga in",
+        "reset_pass_msg": "Glömt ditt lösenord?",
+        "sign_up_msg": "Saknar du ett konto?",
+        "sign_up_link": "Skapa konto",
+        "login_failed_error": "Inloggning misslyckades. Vänligen kontrollera dina inloggningsuppgifter och testa igen.",
+        "validate_error_1": "Ange en giltig epost eller användarnamn.",
+        "validate_error_2": "Lösenord måste innehålla minst 6 tecken.",
+        "log_failed_login": "Inloggningsförfrågan misslyckades:"
+    },
+
+    "ForgotPassword": {
+        "headline": "Återställ lösenord",
+        "action_msg": "Ange e-postadressen för ditt konto, så skickar vi en länk för att återställa ditt lösenord.",
+        "placeholder": "Epost",
+        "button_cancel": "Avbryt",
+        "button_continue": "Fortsätt"
+    },
+
+    "LoggedInUser": {
+        "logged_in_msg": "Lyckad inloggning!",
+        "button_1": "Ansökningar",
+        "button_2": "Skapa ansökning"
+    },
+
+    "Application": {
+        "response_error": "Misslyckades med att skicka ansökan",
+        "log_submit_error": "Fel vid inskickning av ansökan:",
+        "cancel_button": "Avbryt",
+        "preview_button": "Förhandsgranska & Skicka",
+        "submit_button": "Skicka",
+        "ticket_sales": "Biljettförsäljning",
+        "lotteries": "Lotterier",
+        "roller_coaster_op": "Berg- och dalbaneoperatör",
+        "preview_headline": "Förhandsgranskning",
+        "entered_comp": "Angivna kompetenser",
+        "competence": "Kompetens",
+        "years_of_experience": "År av erfarenhet",
+        "years": "år",
+        "entered_periods": "Angivna tidsperioder",
+        "from": "Från",
+        "to": "Till",
+        "submit_confirmation": "Tack för din ansökan!",
+        "submit_msg_row_1": "Din ansökan har mottagits.",
+        "submit_msg_row_2": "Vårt team på Theme Park Careers kommer att gå igenom din ansökan",
+        "submit_msg_row_3": "och om din profil matchar våra lediga tjänster kommer vi att kontakta dig.",
+        "submit_msg_row_4": "Vi uppskattar ditt intresse och ser fram emot möjligheten att arbeta tillsammans!",
+        "home_button": "Återgå till användarsidan"
+    },
+
+    "ApplicationForm": {
+        "checkInput_duplicate_comp_error": "Denna kompetens har redan lagts till!",
+        "checkInput_empty_field_error": "Vänligen fyll i alla obligatoriska fält!",
+        "checkInput_past_date_error": "Det valda datumet kan inte vara i det förflutna. Vänligen välj ett giltigt datum!",
+        "checkInput_date_sequence_error": "Slutdatumet måste vara samma som eller senare än startdatumet!",
+        "headline": "Ansökan",
+        "text_row_1": "Välj upp till tre kompetenser och ange antal års erfarenhet.",
+        "text_row_2": "Klicka på lägg till för att lägga till kompetensen i din ansökan.",
+        "text_row_3": "Ange de datum du är tillgänglig för att arbeta.",
+        "text_row_4": "Klicka på lägg till för att lägga till datumet i din ansökan.",
+        "remove": "Ta bort",
+        "add": "Lägg till",
+        "comp_input_label": "Välj en kompetens",
+        "ticket_sales": "Biljettförsäljning",
+        "lotteries": "Lotterier",
+        "roller_coaster_op": "Berg- och dalbaneoperatör",
+        "date_from": "Från:",
+        "date_to": "Till:"
+    },
+
+    "ViewApplicant":{
+        "headline": "Ansökningsdetaljer"
+    },
+
+    "ApplicationDetails":{
+        "unhandled": "ohanterad",
+        "accepted": "accepterad",
+        "rejected": "avslagen",
+        "response_error": "Misslyckades med att uppdatera status",
+        "fetch_error": "Misslyckades med att hämta ansökningsdetaljer. Försök igen senare.",
+        "log_fetch_error": "Fel vid hämtning av detaljer:",
+        "log_update_error": "Fel vid uppdatering av status:",
+        "update_error": "Misslyckades med att uppdatera ansökningens status. Försök igen.",
+        "details_error": "Inga detaljer hittades för denna ansökan.",
+        "headline": "Ansökningsdetaljer",
+        "person_info": "Personinformation",
+        "name": "Namn",
+        "pnr": "Personnummer",
+        "email": "Epost",
+        "status_header": "Ansökningens status",
+        "status": "Status",
+        "availability_period": "Tillgänglighetsperioder",
+        "from": "Från",
+        "to": "Till",
+        "competencies": "Kompetenser",
+        "competence": "Kompetens",
+        "years_of_experience": "År av erfarenhet",
+        "no_competencies": "Inga kompetenser listade",
+        "no_availability_periods": "Inga perioder listade"
+    },
+
+    "ListApplicants": {
+        "headline": "Ansökningar"
+    },
+
+    "ApplicantTable": {
+        "id": "ID",
+        "name": "Namn",
+        "surname": "Efternamn",
+        "email": "Epost",
+        "status_name": "Status",
+        "fetch_error_1": "Något gick fel när ansökningarna hämtades, försök igen senare.",
+        "fetch_error_2": "Fel vid hämtning av ansökningar:"
+    },
+
+    "NotFound": {
+        "404_msg": "Sidan hittades inte!",
+        "button": "Återvänd till startsidan"
+    }
+}

@@ -13,6 +13,7 @@ import {
   Box,
   SelectChangeEvent 
 } from '@mui/material';
+import { useTranslation } from "react-i18next";
 
 interface Availability {
   person_id: number;
@@ -45,13 +46,8 @@ interface ApplicationDetails {
 interface StatusOption {
   status_id: number;
   status_name: string;
+  name: string;
 }
-
-const STATUS_OPTIONS: StatusOption[] = [
-  { status_id: 1, status_name: 'unhandled' },
-  { status_id: 2, status_name: 'accepted' },
-  { status_id: 3, status_name: 'rejected' }
-];
 
 export default function ApplicationDetails() {
   const { application_id } = useParams();
@@ -59,6 +55,13 @@ export default function ApplicationDetails() {
   const [error, setError] = useState<string>('');
   const [statusUpdateError, setStatusUpdateError] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const { t } = useTranslation("ApplicationDetails");
+
+  const STATUS_OPTIONS: StatusOption[] = [
+    { status_id: 1, status_name: "unhandled", name: t("unhandled") },
+    { status_id: 2, status_name: "accepted", name: t("accepted") },
+    { status_id: 3, status_name: "rejected", name: t("rejected") }
+  ];
 
   const fetchDetails = useCallback(async () => {
     try {
@@ -76,9 +79,9 @@ export default function ApplicationDetails() {
       const data = (await response.json()) as ApplicationDetails;
       setDetails(data);
     } catch (error: unknown) {
-      console.error('Error fetching details:', error);
-      setError('Failed to fetch application details. Please try again later.');
-    }
+      console.error(t("log_fetch_error"), error);
+      setError(t("fetch_error"));
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [application_id]);
 
   useEffect(() => {
@@ -104,13 +107,13 @@ export default function ApplicationDetails() {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to update status');
+        throw new Error(t("response_error"));
       }
 
       void fetchDetails();
     } catch (error: unknown) {
-      console.error('Error updating status:', error);
-      setStatusUpdateError('Failed to update application status. Please try again.');
+      console.error(t("log_update_error"), error);
+      setStatusUpdateError(t("update_error"));
     } finally {
       setIsUpdating(false);
     }
@@ -127,7 +130,7 @@ export default function ApplicationDetails() {
   if (!details) {
     return (
       <Container sx={{ mt: 4 }}>
-        <Alert severity="info">No details found for this application.</Alert>
+        <Alert severity="info">{t("details_error")}</Alert>
       </Container>
     );
   }
@@ -136,17 +139,17 @@ export default function ApplicationDetails() {
     <Container sx={{ mt: 4 }}>
       <Paper elevation={2} sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom>
-          Application Details
+          {t("headline")}
         </Typography>
         
         {/* Personal Information */}
         <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-          Personal Information
+          {t("person_info")}
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)' } }}>
             <Typography variant="subtitle1" color="text.secondary">
-              Name
+              {t("name")}
             </Typography>
             <Typography variant="body1" gutterBottom>
               {details.person.name} {details.person.surname}
@@ -154,7 +157,7 @@ export default function ApplicationDetails() {
           </Box>
           <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)' } }}>
             <Typography variant="subtitle1" color="text.secondary">
-              Personal Number
+              {t("pnr")}
             </Typography>
             <Typography variant="body1" gutterBottom>
               {details.person.pnr}
@@ -162,7 +165,7 @@ export default function ApplicationDetails() {
           </Box>
           <Box sx={{ flex: '1 1 100%' }}>
             <Typography variant="subtitle1" color="text.secondary">
-              Email
+            {t("email")}
             </Typography>
             <Typography variant="body1" gutterBottom>
               {details.person.email}
@@ -172,11 +175,11 @@ export default function ApplicationDetails() {
 
         {/* Application Status */}
         <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-          Application Status
+          {t("status_header")}
         </Typography>
         <Box sx={{ mb: 3 }}>
           <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="status-select-label">Status</InputLabel>
+            <InputLabel id="status-select-label">{t("status")}</InputLabel>
             <Select
             labelId="status-select-label"
             value={STATUS_OPTIONS.find(opt => opt.status_name === details.status)?.status_id ?? ''}
@@ -187,7 +190,7 @@ export default function ApplicationDetails() {
 
               {STATUS_OPTIONS.map((option) => (
                 <MenuItem key={option.status_id} value={option.status_id}>
-                  {option.status_name.charAt(0).toUpperCase() + option.status_name.slice(1)}
+                  {option.name.charAt(0).toUpperCase() + option.name.slice(1)}
                 </MenuItem>
               ))}
             </Select>
@@ -206,7 +209,7 @@ export default function ApplicationDetails() {
 
         {/* Availability Periods */}
         <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-          Availability Periods
+          {t("availability_period")}
         </Typography>
         {details.availability.length > 0 ? (
           details.availability.map((period, index) => (
@@ -214,7 +217,7 @@ export default function ApplicationDetails() {
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                 <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
                   <Typography variant="subtitle2" color="text.secondary">
-                    From
+                    {t("from")}
                   </Typography>
                   <Typography variant="body1">
                     {new Date(period.from_date).toLocaleDateString()}
@@ -222,7 +225,7 @@ export default function ApplicationDetails() {
                 </Box>
                 <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
                   <Typography variant="subtitle2" color="text.secondary">
-                    To
+                    {t("to")}
                   </Typography>
                   <Typography variant="body1">
                     {new Date(period.to_date).toLocaleDateString()}
@@ -233,13 +236,13 @@ export default function ApplicationDetails() {
           ))
         ) : (
           <Typography variant="body1" color="text.secondary">
-            No availability periods specified
+            {t("no_availability_periods")}
           </Typography>
         )}
 
         {/* Competencies */}
         <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-          Competencies
+          {t("competencies")}
         </Typography>
         {details.competence.length > 0 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -248,7 +251,7 @@ export default function ApplicationDetails() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
                   <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
                     <Typography variant="subtitle2" color="text.secondary">
-                      Competence
+                      {t("competence")}
                     </Typography>
                     <Typography variant="body1">
                       {comp.competence_name}
@@ -256,7 +259,7 @@ export default function ApplicationDetails() {
                   </Box>
                   <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
                     <Typography variant="subtitle2" color="text.secondary">
-                      Years of Experience
+                      {t("years_of_experience")}
                     </Typography>
                     <Typography variant="body1">
                       {parseFloat(comp.years_of_experience)} {parseFloat(comp.years_of_experience) === 1 ? 'year' : 'years'}
@@ -268,7 +271,7 @@ export default function ApplicationDetails() {
           </Box>
         ) : (
           <Typography variant="body1" color="text.secondary">
-            No competencies listed
+            {t("no_competencies")}
           </Typography>
         )}
       </Paper>
