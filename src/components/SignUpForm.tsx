@@ -79,7 +79,7 @@ export default function SignUp() {
     const [name, setName] = useState('');
     const [pnr, setPnr] = useState('');
 
-    const [signUpErrorMessage, setSignUpErrorMessage] = React.useState('');
+
 
     const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
@@ -148,27 +148,31 @@ export default function SignUp() {
     };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!validateInputs) {
-      return;
-    }
-
-    const role_id = 2;
-    //${import.meta.env.VITE_API_URL}
-    try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ name, surname, pnr, email, username, password, role_id }),
-        });
+  event.preventDefault();
   
-        if (response.ok) {
-          void navigate('/user');
-        }
-      } catch (error) {
-        console.error('sign up request failed:', error);
-      }
+  if (!validateInputs()) {  
+    return;
+  }
+
+  const role_id = 2;
+
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name, surname, pnr, email, username, password, role_id }),
+    });
+
+    if (response.ok) {
+      void navigate('/user');
+    } else {
+      console.error('Signup failed');
+    }
+  } catch (error) {
+    console.error('Signup request failed:', error);
+  }
+};
 
     console.log({
       name, surname, email, pnr, username, password, role_id});
@@ -186,12 +190,12 @@ export default function SignUp() {
           </Typography>
           <Box
             component="form"
-            onSubmit={() => handleSubmit()}
+            onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           > 
             <Box
               component="form" 
-              onSubmit={() => handleSubmit()}
+              onSubmit={handleSubmit}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
