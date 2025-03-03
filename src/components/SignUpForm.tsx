@@ -149,7 +149,7 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
-  
+
 
   if (!validateInputs()) {  
     return;
