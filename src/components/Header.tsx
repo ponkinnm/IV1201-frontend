@@ -1,7 +1,6 @@
 import { AppBar, Box, Toolbar, Typography, FormControl, Select, MenuItem} from '@mui/material';
 import { Attractions } from '@mui/icons-material';
 import { Link} from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
