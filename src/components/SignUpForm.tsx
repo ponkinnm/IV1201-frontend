@@ -150,6 +150,7 @@ export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
   
+
   if (!validateInputs()) {  
     return;
   }
@@ -174,9 +175,6 @@ export default function SignUp() {
   }
 };
 
-    console.log({
-      name, surname, email, pnr, username, password, role_id});
-    };
 
   return (
       <SignUpContainer direction="column" justifyContent="space-between">
@@ -231,7 +229,7 @@ export default function SignUp() {
               </Box>
             <Box
               component="form"
-              onSubmit={() => handleSubmit()}
+              onSubmit={handleSubmit}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
