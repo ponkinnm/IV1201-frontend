@@ -180,7 +180,7 @@ export default function SignIn() {
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link component="button"
-              type="button" onClick={() => { void navigate("/signup") }} sx={{ alignSelf: 'center' }}>
+              type="button" to="/signup" sx={{ alignSelf: 'center' }}>
                 Sign up
               </Link>
             </Typography>
