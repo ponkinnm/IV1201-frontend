@@ -12,7 +12,7 @@ function Header() {
 
 
   const changeLanguage = (language: string) => {
-    i18n.changeLanguage(language);
+    void i18n.changeLanguage(language);
   };
 
   return (
