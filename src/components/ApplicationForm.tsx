@@ -64,7 +64,8 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     //Display or hide input error message for the two different types of input rows.
     const [competenceError, setCompetenceError] = useState(false);
     const [dateError, setDateError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [compErrorMessage, setCompErrorMessage] = useState("");
+    const [dateErrorMessage, setDateErrorMessage] = useState("");
 
     //Data from competence rows
     const [competenceProfileID, setCompetenceProfileID] = useState<Competence[]>([]);
@@ -159,27 +160,27 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     const checkInput = (type: "competence" | "date") => {
         if(type === "competence"){
             if(competenceProfileID.length !== yearsOfExperience.length){ 
-                setErrorMessage(t("checkInput_duplicate_comp_error")); //User tried to add the same competence twice
+                setCompErrorMessage(t("checkInput_duplicate_comp_error")); //User tried to add the same competence twice
                 setCompetenceError(true);
                 return false;
             } else if(competenceLock){
-                setErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
+                setCompErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
                 setCompetenceError(true);
                 return false;
             }
         } else if(type === "date"){
             const today = getTodaysDate();
             if(availableFrom.some(date => date.from !== undefined && date.from < today) || availableTo.some(date => date.to !== undefined && date.to < today)){
-                setErrorMessage(t("checkInput_past_date_error")); //User entered a date that lies in the past
+                setDateErrorMessage(t("checkInput_past_date_error")); //User entered a date that lies in the past
                 setDateError(true);
                 return false;
             }
             else if(availableFrom.some(fromDate => availableTo.some(toDate => fromDate.id === toDate.id && toDate.to !== undefined && fromDate.from !== undefined && (new Date(fromDate.from) > new Date (toDate.to) && fromDate.from !== toDate.to)))){ 
-                setErrorMessage(t("checkInput_date_sequence_error")); //User entered a to date that comes before the from date
+                setDateErrorMessage(t("checkInput_date_sequence_error")); //User entered a to date that comes before the from date
                 setDateError(true);
                 return false;
             } else if(dateLock){ //Check that all input fields have been filled out
-                setErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
+                setDateErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
                 setDateError(true);
                 return false;
             }
@@ -233,7 +234,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 <Typography sx={{marginLeft: 1}}>{t("text_row_1")}</Typography>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>{t("text_row_2")}</Typography>
                 <Box sx={{height: 40, width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    {competenceError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
+                    {competenceError && <Typography sx={{color: "red"}}>{compErrorMessage}</Typography>}
                 </Box>
                 {competenceRow.map((row)=>(
                     <DynamicInput key={`competence-${row.id}`} id={row.id} addRow={() => addRow("competence")} removeRow={() => removeRow(row.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={row.id} enableInput={enableInput} addData={addData} setCompetenceLock={setCompetenceLock}/>}/>
@@ -241,7 +242,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
                 <Typography sx={{marginLeft: 1, marginTop: "50px"}}>{t("text_row_3")}</Typography>
                 <Typography sx={{marginLeft: 1, marginBottom: 2}}>{t("text_row_4")}</Typography>
                 <Box sx={{height: 40, width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    {dateError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
+                    {dateError && <Typography sx={{color: "red"}}>{dateErrorMessage}</Typography>}
                 </Box>
                 {availabilityRow.map((row)=>( 
                     <DynamicInput key={`date-${row.id}`} id={row.id} addRow={() => addRow("date")} removeRow={() => removeRow(row.id, "date")} addData={addData} component={(enableInput: boolean) => <DateRow id = {row.id} enableInput={enableInput} addData={addData} setDateLock={setDateLock}/>}/>
