@@ -1,0 +1,135 @@
+{
+    "Header": {
+
+    },
+
+    "HomePage": {
+        "headline": "Home",
+        "welcome_msg": "Welcome to Theme park careers!",
+        "action_msg": "Sign in or create a new account"
+    },
+
+    "SignInForm": {
+        "sign_in": "Sign in",
+        "label_1": "Email or username",
+        "placeholder_1": "your@email.com",
+        "label_2": "Password",
+        "button": "Sign in",
+        "reset_pass_msg": "Forgot your password?",
+        "sign_up_msg": "Don't have an account?",
+        "sign_up_link": "Sign up",
+        "login_failed_error": "Login failed. Please check your credentials and try again.",
+        "validate_error_1": "Please enter a valid email address or username.",
+        "validate_error_2": "Password must be at least 6 characters long.",
+        "log_failed_login": "Login request failed:"
+    },
+
+    "ForgotPassword": {
+        "headline": "Reset password",
+        "action_msg": "Enter your account's email address, and we'll send you a link toreset your password.",
+        "placeholder": "Email address",
+        "button_cancel": "Cancel",
+        "button_continue": "Continue"
+    },
+
+    "LoggedInUser": {
+        "logged_in_msg": "Successful log in!",
+        "button_1": "Applications",
+        "button_2": "Create application"
+    },
+
+    "Application": {
+        "response_error": "Failed to submit application",
+        "log_submit_error": "Error submitting application:",
+        "cancel_button": "Cancel",
+        "preview_button": "Preview & Submit",
+        "submit_button": "Submit",
+        "ticket_sales": "Ticket sales",
+        "lotteries": "Lotteries",
+        "roller_coaster_op": "Roller coaster operations",
+        "preview_headline": "Preview",
+        "entered_comp": "Entered competencies",
+        "competence": "Competence",
+        "years_of_experience":"Years of Experience",
+        "years": "years",
+        "entered_periods": "Entered date periods",
+        "from": "From",
+        "to": "To",
+        "submit_confirmation": "Thank You for Your Application!",
+        "submit_msg_row_1": "Your application has been successfully submitted.",
+        "submit_msg_row_2": "Our team at Theme Park Careers will review your information,",
+        "submit_msg_row_3": "and if your qualifications match our openings, we will be in touch.",
+        "submit_msg_row_4": "We appreciate your interest and look forward to the possibility of working together!",
+        "home_button": "Return to user page"
+    },
+
+    "ApplicationForm": {
+        "checkInput_duplicate_comp_error": "This competence has already been entered!",
+        "checkInput_empty_field_error": "Please fill out all required fields!",
+        "checkInput_past_date_error": "The selected date cannot be in the past. Please choose a valid date!",
+        "checkInput_date_sequence_error": "The To date must be later than or the same as the From date!",
+        "headline": "Application",
+        "text_row_1": "Select up to three competencies and provide your years of experience.",
+        "text_row_2": "Click add to add the competence to your application.",
+        "text_row_3": "Please provide the dates for the periods you are available to work.",
+        "text_row_4": "Click add to add the date to your application.",
+        "remove": "Remove",
+        "add": "Add",
+        "comp_input_label": "Select a competence",
+        "ticket_sales": "Ticket sales",
+        "lotteries": "Lotteries",
+        "roller_coaster_op": "Roller coaster operations",
+        "date_from": "From:",
+        "date_to": "To:"
+    },
+
+    "ViewApplicant":{
+        "headline": "Applicant Details"
+    },
+
+    "ApplicationDetails":{
+        "unhandled": "unhandled",
+        "accepted": "accepted",
+        "rejected": "rejected",
+        "response_error": "Failed to update status",
+        "fetch_error": "Failed to fetch application details. Please try again later.",
+        "log_fetch_error": "Error fetching details:",
+        "log_update_error": "Error updating status:",
+        "update_error": "Failed to update application status. Please try again.",
+        "details_error": "No details found for this application.",
+        "headline": "Application Details",
+        "person_info": "Personal Information",
+        "name": "Name",
+        "pnr": "Personal Number",
+        "email": "Email",
+        "status_header": "Application Status",
+        "status": "Status",
+        "availability_period": "Availability Periods",
+        "from": "From",
+        "to": "To",
+        "competencies": "Competencies",
+        "competence": "Competence",
+        "years_of_experience": "Years of Experience",
+        "no_competencies": "No competencies listed",
+        "no_availability_periods": "No availability periods specified"
+    },
+
+    "ListApplicants": {
+        "headline": "Applications"
+    },
+
+    "ApplicantTable": {
+        "id": "ID",
+        "name": "Name",
+        "surname": "Surname",
+        "email": "Email",
+        "status_name": "Status",
+        "fetch_error_1": "Something went wrong when fetching applicants, please try again later.",
+        "fetch_error_2": "Error getting applications:"
+    },
+
+    "NotFound": {
+        "404_msg": "Sorry, page not found!",
+        "button": "Go back to home page"
+    }
+}

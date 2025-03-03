@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useTranslation } from "react-i18next";
 
 interface Competence {
     id: number;
@@ -52,6 +53,7 @@ interface AvailableTo {
  * @returns {JSX.Element} ApplicationForm
  */
 export default function ApplicationForm({ getData: getData }:{ getData: (competenceProfileID: Competence[], yearsOfExperience: Competence[], availableFrom: AvailabilityDate[], availableTo: AvailabilityDate[]) => void}){
+    const { t } = useTranslation("ApplicationForm");
     const [id] = useState(Date.now()); //Unique id for each input box
     const [competenceLock, setCompetenceLock] = useState(true); //Locks add button from adding competence until all input boxes on the row have been filled out.
     const [dateLock, setDateLock] = useState(true); //Locks add button from adding a date until all input boxes on the row have been filled out.
@@ -157,27 +159,27 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
     const checkInput = (type: "competence" | "date") => {
         if(type === "competence"){
             if(competenceProfileID.length !== yearsOfExperience.length){ 
-                setErrorMessage("This competence has already been entered!"); //User tried to add the same competence twice
+                setErrorMessage(t("checkInput_duplicate_comp_error")); //User tried to add the same competence twice
                 setCompetenceError(true);
                 return false;
             } else if(competenceLock){
-                setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
+                setErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
                 setCompetenceError(true);
                 return false;
             }
         } else if(type === "date"){
             const today = getTodaysDate();
             if(availableFrom.some(date => date.from !== undefined && date.from < today) || availableTo.some(date => date.to !== undefined && date.to < today)){
-                setErrorMessage("The selected date cannot be in the past. Please choose a valid date!"); //User entered a date that lies in the past
+                setErrorMessage(t("checkInput_past_date_error")); //User entered a date that lies in the past
                 setDateError(true);
                 return false;
             }
             else if(availableFrom.some(fromDate => availableTo.some(toDate => fromDate.id === toDate.id && toDate.to !== undefined && fromDate.from !== undefined && (new Date(fromDate.from) > new Date (toDate.to) && fromDate.from !== toDate.to)))){ 
-                setErrorMessage("The To date must be later than or the same as the From date!"); //User entered a to date that comes before the from date
+                setErrorMessage(t("checkInput_date_sequence_error")); //User entered a to date that comes before the from date
                 setDateError(true);
                 return false;
             } else if(dateLock){ //Check that all input fields have been filled out
-                setErrorMessage("Please fill out all required fields!"); //User tried to add a row without filling out all input boxes
+                setErrorMessage(t("checkInput_empty_field_error")); //User tried to add a row without filling out all input boxes
                 setDateError(true);
                 return false;
             }
@@ -226,18 +228,18 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
 
     return(
         <Box sx={{ minHeight: "calc(100vh-64px)"}}>
-            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>Application</Typography>
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>{t("headline")}</Typography>
             <Box sx={{display: "flex", flexDirection: "column", marginTop: "50px"}}>
-                <Typography sx={{marginLeft: 1}}>Select up to three competencies and provide your years of experience.</Typography>
-                <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the competence to your application.</Typography>
+                <Typography sx={{marginLeft: 1}}>{t("text_row_1")}</Typography>
+                <Typography sx={{marginLeft: 1, marginBottom: 2}}>{t("text_row_2")}</Typography>
                 <Box sx={{height: 40, width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                     {competenceError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
                 </Box>
                 {competenceRow.map((row)=>(
                     <DynamicInput key={`competence-${row.id}`} id={row.id} addRow={() => addRow("competence")} removeRow={() => removeRow(row.id, "competence")} addData={addData} component={(enableInput: boolean) => <CompetenceRow id={row.id} enableInput={enableInput} addData={addData} setCompetenceLock={setCompetenceLock}/>}/>
                 ))}
-                <Typography sx={{marginLeft: 1, marginTop: "50px"}}>Please provide the dates for the periods you are available to work.</Typography>
-                <Typography sx={{marginLeft: 1, marginBottom: 2}}>Click add to add the date to your application.</Typography>
+                <Typography sx={{marginLeft: 1, marginTop: "50px"}}>{t("text_row_3")}</Typography>
+                <Typography sx={{marginLeft: 1, marginBottom: 2}}>{t("text_row_4")}</Typography>
                 <Box sx={{height: 40, width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                     {dateError && <Typography sx={{color: "red"}}>{errorMessage}</Typography>}
                 </Box>
@@ -262,6 +264,7 @@ export default function ApplicationForm({ getData: getData }:{ getData: (compete
  * @returns {JSX.Element} DynamicInput
  */
 function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addData, component: component }: { id: number, addRow: () => boolean, removeRow: (id: number) => void, addData: (id: number, value: Competence | AvailableFrom | AvailableTo) => void, component: (enableInput: boolean, addData: (id: number, target: Competence | AvailableFrom | AvailableTo) => void) => JSX.Element }){
+    const { t } = useTranslation("ApplicationForm");
     const [buttonControl, setButtonControl] = useState(false); //Render an add or remove button
     const [enableInput, setEnableInput] = useState(false); //Enable or disable input boxes
 
@@ -276,8 +279,8 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addDa
         <Box sx={{ marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
             {component(enableInput, addData)}
             {
-                buttonControl ? <Button onClick={() => {setButtonControl(false); setEnableInput(false); removeRow(id); }} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Remove</Button> 
-                              : <Button onClick={() => {add()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>Add</Button>
+                buttonControl ? <Button onClick={() => {setButtonControl(false); setEnableInput(false); removeRow(id); }} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>{t("remove")}</Button> 
+                              : <Button onClick={() => {add()}} sx={{backgroundColor: "#white", color: "#1976d2", minWidth: 90}}>{t("add")}</Button>
             }   
         </Box>
     );
@@ -290,6 +293,7 @@ function DynamicInput({ id, addRow: addRow, removeRow: removeRow, addData: addDa
  * @returns {JSX.Element} CompetenceRow
  */
 function CompetenceRow({ id, setCompetenceLock: setCompetenceLock, enableInput, addData: addData}: { id: number, setCompetenceLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: Competence) => void; }){
+    const { t } = useTranslation("ApplicationForm");
     const [competenceProfile, setCompetenceProfile] = useState("");
     const [yearsOfExperience, setYearsOfExperience] = useState("");
 
@@ -306,7 +310,7 @@ function CompetenceRow({ id, setCompetenceLock: setCompetenceLock, enableInput, 
     return(
         <Box sx={{ minWidth: 750, display: "flex", alignItems: "center", gap: 1, height: "100%"}}>
             <FormControl fullWidth>
-                <InputLabel>Select a competence</InputLabel>
+                <InputLabel>{t("comp_input_label")}</InputLabel>
                 <Select
                     id={`${id}`}
                     name={"competence_profile_id"}
@@ -318,9 +322,9 @@ function CompetenceRow({ id, setCompetenceLock: setCompetenceLock, enableInput, 
                         }
                     }}
                 >
-                    <MenuItem value={1}>Ticket sales</MenuItem>
-                    <MenuItem value={2}>Lotteries</MenuItem>
-                    <MenuItem value={3}>Roller coaster operation</MenuItem>
+                    <MenuItem value={1}>{t("ticket_sales")}</MenuItem>
+                    <MenuItem value={2}>{t("lotteries")}</MenuItem>
+                    <MenuItem value={3}>{t("roller_coaster_op")}</MenuItem>
                 </Select>
             </FormControl>
             <TextField 
@@ -348,6 +352,7 @@ function CompetenceRow({ id, setCompetenceLock: setCompetenceLock, enableInput, 
  * @returns {JSX.Element} DateRow
  */
 function DateRow({ id, setDateLock: setDateLock, enableInput, addData: addData}: { id: number, setDateLock: (check: boolean) => void, enableInput: boolean, addData: (id: number, value: AvailableFrom | AvailableTo) => void }){
+    const { t } = useTranslation("ApplicationForm");
     const [from, setFrom] = useState<Dayjs | null>(null);
     const [to, setTo] = useState<Dayjs | null>(null);
 
@@ -365,7 +370,7 @@ function DateRow({ id, setDateLock: setDateLock, enableInput, addData: addData}:
         <Box sx={{ minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Box sx={{marginBottom: 1, minWidth: "750px", display: "flex", flexDirection: "row", gap: 1}}>
-                    <Typography sx={{ display: "flex", alignItems: "center" }}>From: </Typography>
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>{t("date_from")}</Typography>
                     <DatePicker
                         key={`from_date-${id}`}
                         name={"from_date"}
@@ -379,7 +384,7 @@ function DateRow({ id, setDateLock: setDateLock, enableInput, addData: addData}:
                             }
                         }}
                     />   
-                    <Typography sx={{ display: "flex", alignItems: "center" }}>To: </Typography>
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>{t("date_to")}</Typography>
                     <DatePicker 
                         key={`to_date-${id}`}
                         name={"to_date"}

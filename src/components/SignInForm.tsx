@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
 import { type FormEvent, useState } from 'react';
+import { useTranslation } from "react-i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -47,6 +48,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -57,6 +59,8 @@ export default function SignIn() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [loginErrorMessage, setLoginErrorMessage] = useState<string>('');
   const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
+
+  const { t } = useTranslation("SignInForm");
 
   const toggleForgotPasswordDialog = () => {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
@@ -81,10 +85,10 @@ export default function SignIn() {
       if (response.ok) {
         void navigate('/user');
       } else {
-        setLoginErrorMessage('Login failed. Please check your credentials and try again.');
+        setLoginErrorMessage(t("login_failed_error"));
       }
     } catch (error) {
-      console.error('Login request failed:', error);
+      console.error(t("log_failed_login"), error);
     }
   };
 
@@ -92,7 +96,7 @@ export default function SignIn() {
     let isValid = true;
     if (!username) {
       setUsernameError(true);
-      setUsernameErrorMessage('Please enter a valid email address or username.');
+      setUsernameErrorMessage(t("validate_error_1"));
       isValid = false;
     } else {
       setUsernameError(false);
@@ -100,7 +104,7 @@ export default function SignIn() {
     }
     if (!password || password.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage(t("validate_error_2"));
       isValid = false;
     } else {
       setPasswordError(false);
@@ -114,7 +118,7 @@ export default function SignIn() {
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
-            Sign in
+            {t("sign_in")}
           </Typography>
           <Box
             component="form"
@@ -125,14 +129,14 @@ export default function SignIn() {
             sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="username">Email or username</FormLabel>
+              <FormLabel htmlFor="username">{t("label_1")}</FormLabel>
               <TextField
                 error={usernameError}
                 helperText={usernameErrorMessage}
                 id="username"
                 type="text"
                 name="username"
-                placeholder="your@email.com"
+                placeholder={t("placeholder_1")}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
                 autoFocus
@@ -143,7 +147,7 @@ export default function SignIn() {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password">{t("label_2")}</FormLabel>
               <TextField
                 error={passwordError}
                 helperText={passwordErrorMessage || loginErrorMessage}
@@ -162,7 +166,7 @@ export default function SignIn() {
             </FormControl>
             <ForgotPassword open={showForgotPasswordDialog} handleClose={toggleForgotPasswordDialog} />
             <Button type="submit" fullWidth variant="contained">
-              Sign in
+            {t("button")}
             </Button>
             <Link
               component="button"
@@ -171,14 +175,14 @@ export default function SignIn() {
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
-              Forgot your password?
+              {t("reset_pass_msg")}
             </Link>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
+              {t("sign_up_msg")}{' '}
               <Link href="/material-ui/getting-started/templates/sign-in/ody2" sx={{ alignSelf: 'center' }}>
-                Sign up
+                {t("sign_up_link")}
               </Link>
             </Typography>
           </Box>
