@@ -1,7 +1,10 @@
 import { Button, Container, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 function NotFound() {
+  const { t } = useTranslation("NotFound");
+
   return (
     <Container
       sx={{
@@ -14,9 +17,9 @@ function NotFound() {
         gap: '20px',
       }}
     >
-      <Typography variant="h4">Sorry, page not found!</Typography>
+      <Typography variant="h4">{t("404_msg")}</Typography>
       <Link to="/">
-        <Button variant="outlined">Go back to home page</Button>
+        <Button variant="outlined">{t("button")}</Button>
       </Link>
     </Container>
   );

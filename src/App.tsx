@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CssBaseline, ThemeProvider, Container} from '@mui/material';
+import { CssBaseline, ThemeProvider, Container } from '@mui/material';
 import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import ListApplicants from './pages/ListApplicants.tsx';
-import ViewApplicant from './pages/ApplicationDetails.tsx'; 
+import ViewApplicant from './pages/ViewApplicant.tsx'; 
 import LoggedInUser from './pages/LoggedInUser.tsx';
 import Application from './pages/Application.tsx';
 import { theme } from './theme/theme.ts';
 import SignUp from './pages/SignUp.tsx';
+import './i18n';
 
 /**
  * Routes to the following views:
@@ -17,8 +18,6 @@ import SignUp from './pages/SignUp.tsx';
  * "/user" - Landing page for authenticated users
  * "/apply" - Application form to submit a new work application
  * "*" - 404 Not found page
- * 
- * @returns App
  */
 function App() {
   return (

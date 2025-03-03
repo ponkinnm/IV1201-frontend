@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import { Paper, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 interface Applicant {
   application_id: number;
@@ -11,25 +12,26 @@ interface Applicant {
   status_name: string;
 }
 
-const columns = [
-  { field: 'application_id', headerName: 'ID', width: 100 },
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'surname', headerName: 'Surname', width: 200 },
-  { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'status_name', headerName: 'Status', width: 200 },
-];
-
 export default function ApplicantTable() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<Applicant[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const { t } = useTranslation("ApplicantTable");
+
+  const columns = [
+    { field: 'application_id', headerName: t("id"), width: 100 },
+    { field: 'name', headerName: t("name"), width: 200 },
+    { field: 'surname', headerName: t("surname"), width: 200 },
+    { field: 'email', headerName: t("email"), width: 200 },
+    { field: 'status_name', headerName: t("status_name"), width: 200 },
+  ];
 
   const getApplications = async (): Promise<Applicant[]> => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/applications`, {
         credentials: 'include', // This is important for sending cookies
       });
-
+      
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
@@ -37,7 +39,7 @@ export default function ApplicantTable() {
       const data = (await response.json()) as Applicant[];
       return data;
     } catch {
-      setErrorMsg('Something went wrong when fetching applicants, please try again later.');
+      setErrorMsg(t("fetch_error_1"));
       return [];
     }
   };
@@ -48,10 +50,10 @@ export default function ApplicantTable() {
         const applications = await getApplications();
         setRows(applications);
       } catch (error) {
-        console.error('Error getting applications:', error);
+        console.error(t("fetch_error_2"), error);
       }
     })();
-  }, []);
+  });
 
   const handleRowClick = (params: GridRowParams<Applicant>) => {
     void navigate(`/applicants/${params.row.application_id}`);

@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 
 interface Competence {
     id: number;
@@ -27,6 +27,7 @@ interface Date {
 }
 
 export default function Application(){
+    const { t } = useTranslation("Application");
     const navigate = useNavigate();
     const [showPreview, setShowPreview] = useState(false); //Show preview page
     const [submit, setSubmit] = useState(false); //Show "application successfully submitted" page
@@ -76,12 +77,12 @@ export default function Application(){
             });
 
             if (!response.ok) {
-                throw new Error('Failed to submit application');
+                throw new Error(t("response_error"));
             }
 
             setSubmit(true);
         } catch (error) {
-            console.error('Error submitting application:', error);
+            console.error(t("log_submit_error"), error);
             // TODO Error handling
         }
     };
@@ -93,16 +94,11 @@ export default function Application(){
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", left: "50%", bottom: "30px", transform: "translateX(-50%)", zIndex: 1000, paddingTop: "20px", paddingBottom: "20px", maxHeight: "90px"}}>
-                { !submit && <Button onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>Cancel</Button>}
+                { !submit && <Button onClick={() => { void navigate("/user") }} sx={{ backgroundColor: "#1976d2", color: "white", marginRight: 1}}>{t("cancel_button")}</Button>}
                 { !showPreview 
-                    ? <Button onClick={() => {setShowPreview(!showPreview)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>Preview & Submit</Button> 
+                    ? <Button onClick={() => {setShowPreview(!showPreview)}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>{t("preview_button")}</Button> 
                     : !submit && 
-                    <Button 
-                      onClick={() => {void submitData()}} 
-                      sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}                  
-                    >
-                      Submit
-                    </Button>
+                    <Button onClick={() => {void submitData()}} sx={{ backgroundColor: "#1976d2", color: "white", marginLeft: 1}}>{t("submit_button")}</Button>
                 }
             </Box>
         </Box>
@@ -115,21 +111,23 @@ export default function Application(){
  * @returns {JSX.Element} Preview
  */
 function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, availabilityTo }: { competenceProfileID: Competence[]; yearsOfExperience: Competence[]; availabilityFrom: Date[]; availabilityTo: Date[]; }) {
+    const { t } = useTranslation("Application");
+
     const names: Record<string, string> = {
-        "1": "Ticket sales",
-        "2": "Lotteries",
-        "3": "Roller coaster operation"
+        "1": t("ticket_sales"),
+        "2": t("lotteries"),
+        "3": t("roller_coaster_op")
     }
 
     return(
         <Box>
-            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>Preview</Typography>
-            <Typography variant="h5" sx={{ marginTop: 4}}>Entered competencies</Typography>
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 4}}>{t("preview_headline")}</Typography>
+            <Typography variant="h5" sx={{ marginTop: 4}}>{t("entered_comp")}</Typography>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell><Typography sx={{fontWeight: "bold"}}>Competence</Typography></TableCell>
-                        <TableCell><Typography sx={{fontWeight: "bold"}}>Years of experience</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>{t("competence")}</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>{t("years_of_experience")}</Typography></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -137,18 +135,18 @@ function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, ava
                         comp.id === exp.id && (
                             <TableRow key={comp.id}>
                                 <TableCell>{`${names[comp.value]}`}</TableCell>
-                                <TableCell>{`${exp.value} years`}</TableCell>
+                                <TableCell>{`${exp.value} ${t("years")}`}</TableCell>
                             </TableRow>
                         ))))
                     }
                 </TableBody>
             </Table>
-            <Typography variant="h5" sx={{ marginTop: 4}}>Entered date periods</Typography>
+            <Typography variant="h5" sx={{ marginTop: 4}}>{t("entered_periods")}</Typography>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell><Typography sx={{fontWeight: "bold"}}>From</Typography></TableCell>
-                        <TableCell><Typography sx={{fontWeight: "bold"}}>To</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>{t("from")}</Typography></TableCell>
+                        <TableCell><Typography sx={{fontWeight: "bold"}}>{t("to")}</Typography></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -173,15 +171,16 @@ function Preview({ competenceProfileID, yearsOfExperience, availabilityFrom, ava
  * @returns {JSX.Element} Confirmation
  */
 function Confirmation(){
+    const { t } = useTranslation("Application");
     const navigate = useNavigate();
     return(
         <Box sx={{display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", minHeight: "100%"}}>
-            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 6}}>Thank You for Your Application!</Typography>
-            <Typography sx={{marginTop: 6}}>Your application has been successfully submitted.</Typography>
-            <Typography>Our team at Theme Park Careers will review your information,</Typography>
-            <Typography>and if your qualifications match our openings, we will be in touch.</Typography>
-            <Typography>We appreciate your interest and look forward to the possibility of working together!</Typography>
-            <Button onClick={() => {void navigate("/user")}} sx={{ backgroundColor: "#1976d2", color: "white", marginTop: 6}}>Return to user page</Button>
+            <Typography variant="h4" sx={{display: "flex", justifyContent: "center", alignItems: "start", marginTop: 6}}>{t("submit_confirmation")}</Typography>
+            <Typography sx={{marginTop: 6}}>{t("submit_msg_row_1")}</Typography>
+            <Typography>{t("submit_msg_row_2")}</Typography>
+            <Typography>{t("submit_msg_row_3")}</Typography>
+            <Typography>{t("submit_msg_row_4")}</Typography>
+            <Button onClick={() => {void navigate("/user")}} sx={{ backgroundColor: "#1976d2", color: "white", marginTop: 6}}>{t("home_button")}</Button>
         </Box>
     );
 }
