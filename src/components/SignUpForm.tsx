@@ -188,12 +188,16 @@ export default function SignUp() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(event) => {
+              void handleSubmit(event);
+            }}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           > 
             <Box
               component="form" 
-              onSubmit={handleSubmit}
+              onSubmit={(event) => {
+                void handleSubmit(event);
+              }}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
@@ -229,7 +233,9 @@ export default function SignUp() {
               </Box>
             <Box
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={(event) => {
+                void handleSubmit(event);
+              }}
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
