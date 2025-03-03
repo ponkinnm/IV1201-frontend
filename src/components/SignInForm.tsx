@@ -181,7 +181,7 @@ export default function SignIn() {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
               {t("sign_up_msg")}{' '}
-              <Link href="/material-ui/getting-started/templates/sign-in/ody2" sx={{ alignSelf: 'center' }}>
+              <Link component="button" type="button" onClick={ ()=>{ void navigate('/signup')}} sx={{ alignSelf: 'center' }}>
                 {t("sign_up_link")}
               </Link>
             </Typography>

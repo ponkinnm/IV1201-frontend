@@ -63,7 +63,6 @@ export default function Application(){
                     to_date: toDate?.to
                 };
             });
-
             // Call the API to submit the application
             const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/submit`, {
                 method: 'POST',
