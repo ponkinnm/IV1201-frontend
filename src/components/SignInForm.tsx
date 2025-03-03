@@ -70,8 +70,6 @@ export default function SignIn() {
       return;
     }
 
-    // 
-
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
