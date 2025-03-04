@@ -57,7 +57,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp() {
-  
+    const { t } = useTranslation("SignUpForm");
     const navigate = useNavigate();
 
     const [emailError, setEmailError] = useState(false);
@@ -93,7 +93,7 @@ export default function SignUp() {
 
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
         setEmailError(true);
-        setEmailErrorMessage('Please enter a valid email address.');
+        setEmailErrorMessage(t("email_errpr_msg"));
         isValid = false;
         } else {
         setEmailError(false);
@@ -102,7 +102,7 @@ export default function SignUp() {
 
         if (!password.value || password.value.length < 6) {
         setPasswordError(true);
-        setPasswordErrorMessage('Password must be at least 6 characters long.');
+        setPasswordErrorMessage(t("password_error_msg"));
         isValid = false;
         } else {
         setPasswordError(false);
@@ -111,7 +111,7 @@ export default function SignUp() {
 
         if (!name.value || name.value.length < 3) {
         setNameError(true);
-        setNameErrorMessage('Name is required.');
+        setNameErrorMessage(t("name_error_msg"));
         isValid = false;
         } else {
         setNameError(false);
@@ -120,7 +120,7 @@ export default function SignUp() {
 
         if (!surname.value || surname.value.length < 3) {
         setSurnameError(true);
-        setSurnameErrorMessage('Surname is required.');
+        setSurnameErrorMessage(t("surname_error_msg"));
         isValid = false;
         } else {
         setSurnameError(false);
@@ -129,7 +129,7 @@ export default function SignUp() {
 
         if (!username.value || username.value.length < 4) {
         setUsernameError(true);
-        setUsernameErrorMessage('Username is required.');
+        setUsernameErrorMessage(t("username_error_msg"));
         isValid = false;
         } else {
         setUsernameError(false);
@@ -138,7 +138,7 @@ export default function SignUp() {
 
         if (!pnr.value || pnr.value.length < 8) {
         setPnrError(true);
-        setPnrErrorMessage('Personal number is required.');
+        setPnrErrorMessage(t("pnr_error_msg"));
         isValid = false;
         } else {
         setPnrError(false);
@@ -185,7 +185,7 @@ export default function SignUp() {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign up
+            {t("sign_up")}
           </Typography>
           <Box
             component="form"
@@ -202,7 +202,7 @@ export default function SignUp() {
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
-              <FormLabel htmlFor="name">name</FormLabel>
+              <FormLabel htmlFor="name">{t("name")}</FormLabel>
               <TextField
                 autoComplete="name"
                 onChange={(e) => setName(e.target.value)}
@@ -210,14 +210,14 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="name"
-                placeholder="Jon"
+                placeholder={t("name_placeholder")}
                 error={nameError}
                 helperText={nameErrorMessage}
                 color={nameError ? 'error' : 'primary'}
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="surname">surname</FormLabel>
+              <FormLabel htmlFor="surname">{t("surname")}</FormLabel>
               <TextField
                 autoComplete="surname"
                 name="surname"
@@ -225,7 +225,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="surname"
-                placeholder=" Snow"
+                placeholder={t("surname_placeholder")}
                 error={surnameError}
                 helperText={surnameErrorMessage}
                 color={surnameError ? 'error' : 'primary'}
@@ -240,7 +240,7 @@ export default function SignUp() {
               sx={{ display: 'flex', flexDirection: 'raw', gap: 5 }}
             >
             <FormControl>
-              <FormLabel htmlFor="pnr">Personal Number</FormLabel>
+              <FormLabel htmlFor="pnr">{t("pnr")}</FormLabel>
               <TextField
                 autoComplete="pnr"
                 onChange={(e) => setPnr(e.target.value)}
@@ -248,14 +248,14 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="pnr"
-                placeholder="12342556"
+                placeholder={t("pnr_placeholder")}
                   error={pnrError}
                 helperText={pnrErrorMessage}
                 color={pnrError ? 'error' : 'primary'}
               />
             </FormControl>
               <FormControl>
-                <FormLabel htmlFor="username">Username</FormLabel>
+                <FormLabel htmlFor="username">{t("username")}</FormLabel>
                 <TextField
                   autoComplete="username"
                   onChange={(e) => setUsername(e.target.value)}
@@ -263,7 +263,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="username"
-                  placeholder="Jon@231"
+                  placeholder={t("username_placeholder")}
                   error={usernameError}
                   helperText={usernameErrorMessage}
                   color={usernameError ? 'error' : 'primary'}
@@ -271,13 +271,13 @@ export default function SignUp() {
               </FormControl>
             </Box>
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">{t("email")}</FormLabel>
               <TextField
                 required
                 fullWidth
                 id="email"
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                placeholder={t("email_placeholder")}
                 name="email"
                 autoComplete="email"
                 variant="outlined"
@@ -287,13 +287,13 @@ export default function SignUp() {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password">{t("password")}</FormLabel>
               <TextField
                 required
                 fullWidth
                 onChange={(e) => setPassword(e.target.value)}
                 name="password"
-                placeholder="••••••"
+                placeholder={t("password_placeholder")}
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -309,15 +309,15 @@ export default function SignUp() {
               variant="contained"
               onClick={validateInputs}
             >
-              Sign up
+              {t("sign_up")}
             </Button>
           </Box>
           <Divider>
-            <Typography sx={{ color: 'text.secondary' }}>or</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>{t("or")}</Typography>
           </Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ textAlign: 'center' }}>
-              Already have an account?{' '}
+              {t("have_account")}{' '}
               <Link
                 component="button"
                 type="button"
@@ -325,7 +325,7 @@ export default function SignUp() {
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >
-                Sign in
+                {t("sign_in")}
               </Link>
             </Typography>
           </Box>
