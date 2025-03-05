@@ -1,4 +1,3 @@
-import '../container.css';
 import ApplicantTable from '../components/ApplicantTable.tsx';
 import { Typography, Box } from '@mui/material';
 import { useTranslation } from "react-i18next";

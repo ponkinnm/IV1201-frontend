@@ -29,7 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/applicants" element={<ListApplicants />}></Route>
-             <Route path="/applicants/:application_id" element={<ViewApplicant />} />
+            <Route path="/applicants/:application_id" element={<ViewApplicant />} />
             <Route path="/user" element={<LoggedInUser />}></Route>
             <Route path="/apply" element={<Application />}></Route>
             <Route path ="/signup" element={<SignUp />}></Route>

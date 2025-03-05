@@ -4,7 +4,6 @@
  * When the form is filled out it can be previewed by clicking the "Preview & Submit" button.
  * The form is then submitted by clicking the submit button on the preview page.
  */
-import '../container.css';
 import ApplicationForm from '../components/ApplicationForm.tsx';
 import { Typography, Button } from '@mui/material';
 import { useState } from 'react';

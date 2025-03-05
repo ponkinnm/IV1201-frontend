@@ -1,4 +1,3 @@
-import '../container.css';
 import ApplicationDetails from '../components/ApplicationDetails.tsx';
 import { Box } from '@mui/material';
 
