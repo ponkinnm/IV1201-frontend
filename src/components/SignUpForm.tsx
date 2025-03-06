@@ -93,7 +93,7 @@ export default function SignUp() {
 
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
         setEmailError(true);
-        setEmailErrorMessage(t("email_errpr_msg"));
+        setEmailErrorMessage(t("email_error_msg"));
         isValid = false;
         } else {
         setEmailError(false);
