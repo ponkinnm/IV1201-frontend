@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { 
-  Paper, 
-  Alert, 
-  CircularProgress, 
-  Container, 
+import {
+  Paper,
+  Alert,
+  CircularProgress,
+  Container,
   Typography,
   Select,
   MenuItem,
@@ -65,12 +65,9 @@ export default function ApplicationDetails() {
 
   const fetchDetails = useCallback(async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/applications/${application_id}`,
-        {
-          credentials: 'include',
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/${application_id}`, {
+        credentials: 'include',
+      });
 
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
@@ -94,17 +91,17 @@ export default function ApplicationDetails() {
     setStatusUpdateError('');
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/applications/${application_id}/status`,
-        {
-          method: 'PUT',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ new_status_id: newStatusId })
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/${application_id}/status`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          new_status_id: newStatusId,
+          old_status_id: STATUS_OPTIONS.find((opt) => opt.status_name === details?.status)?.status_id,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(t("response_error"));
