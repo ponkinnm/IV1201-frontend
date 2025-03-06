@@ -53,7 +53,7 @@ export default function ApplicantTable() {
         console.error(t("fetch_error_2"), error);
       }
     })();
-  });
+  }, []);
 
   const handleRowClick = (params: GridRowParams<Applicant>) => {
     void navigate(`/applicants/${params.row.application_id}`);
