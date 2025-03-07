@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 function ViewApplicant() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "100vw", margin: 4, overflowY: "hidden" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "100vw", margin: 4, overflowY: "auto" }}>
       <ApplicationDetails />
     </Box>
   );
