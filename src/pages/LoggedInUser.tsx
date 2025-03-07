@@ -4,13 +4,17 @@ import { useTranslation } from "react-i18next";
 
 function LoggedInUser() {
   const navigate = useNavigate();
-    const { t } = useTranslation("LoggedInUser");
+  const { t } = useTranslation("LoggedInUser");
+  const role_id = Number(localStorage.getItem("role_id"));
+  
 
   return (
     <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: 4}}>
       <Typography>{t("logged_in_msg")}</Typography>
-      <Button onClick={() => { void navigate("/applicants") }}>{t("button_1")}</Button>
-      <Button onClick={() => { void navigate("/apply") }}>{t("button_2")}</Button>
+      { role_id === 1 ? (
+      <Button onClick={() => { void navigate("/applicants") }}>{t("button_1")}</Button>) : (
+      <Button onClick={() => { void navigate("/apply") }}>{t("button_2")}</Button> 
+    )}
     </Box>
   );
 }
