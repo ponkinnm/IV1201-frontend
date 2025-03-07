@@ -12,6 +12,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useTranslation } from "react-i18next";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -79,7 +80,7 @@ export default function SignUp() {
     const [name, setName] = useState('');
     const [pnr, setPnr] = useState('');
 
-
+    const { t } = useTranslation("SignUpForm");
 
     const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
@@ -92,7 +93,7 @@ export default function SignUp() {
 
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
         setEmailError(true);
-        setEmailErrorMessage('Please enter a valid email address.');
+        setEmailErrorMessage(t("Please enter a valid email address."));
         isValid = false;
         } else {
         setEmailError(false);
@@ -101,7 +102,7 @@ export default function SignUp() {
 
         if (!password.value || password.value.length < 6) {
         setPasswordError(true);
-        setPasswordErrorMessage('Password must be at least 6 characters long.');
+        setPasswordErrorMessage(t("Password must be at least 6 characters long."));
         isValid = false;
         } else {
         setPasswordError(false);
@@ -110,7 +111,7 @@ export default function SignUp() {
 
         if (!name.value || name.value.length < 3) {
         setNameError(true);
-        setNameErrorMessage('Name is required.');
+        setNameErrorMessage(t("Name is required."));
         isValid = false;
         } else {
         setNameError(false);
@@ -119,7 +120,7 @@ export default function SignUp() {
 
         if (!surname.value || surname.value.length < 3) {
         setSurnameError(true);
-        setSurnameErrorMessage('Surname is required.');
+        setSurnameErrorMessage(t("Surname is required."));
         isValid = false;
         } else {
         setSurnameError(false);
@@ -128,7 +129,7 @@ export default function SignUp() {
 
         if (!username.value || username.value.length < 4) {
         setUsernameError(true);
-        setUsernameErrorMessage('Username is required.');
+        setUsernameErrorMessage(t("Username is required."));
         isValid = false;
         } else {
         setUsernameError(false);
@@ -137,7 +138,7 @@ export default function SignUp() {
 
         if (!pnr.value || pnr.value.length < 8) {
         setPnrError(true);
-        setPnrErrorMessage('Personal number is required.');
+        setPnrErrorMessage(t("'Personal number is required.'"));
         isValid = false;
         } else {
         setPnrError(false);
@@ -168,10 +169,10 @@ export default function SignUp() {
     if (response.ok) {
       void navigate('/user');
     } else {
-      console.error('Signup failed');
+      console.error(t("'Signup failed'"));
     }
   } catch (error) {
-    console.error('Signup request failed:', error);
+    console.error(t("'Signup request failed:'"), error);
   }
 };
 

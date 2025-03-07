@@ -8,12 +8,14 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
+
 function Header() {
   const { i18n } = useTranslation();
   const [language, setLanguage] = useState("en"); //Use english as default language
   const navigate = useNavigate();
   const [logoutErrorMessage, setLogoutErrorMessage] = React.useState('');
 
+  const { t } = useTranslation("Header");
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const handleLogout = async () => {
     try {
@@ -28,10 +30,10 @@ function Header() {
         localStorage.removeItem("role_id");
         navigate('/'); 
       } else {
-        setLogoutErrorMessage("logout_failed_error");
+        setLogoutErrorMessage(t("logout_failed_error"));
       }
     } catch (error) {
-      console.error("log_failed_log out", error);
+      console.error(t("log_failed_log out"), error);
     }
 
   };
