@@ -49,6 +49,14 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+interface AuthResponse {
+  username: string;
+  name: string;
+  id: number;  
+  role_id: number; 
+}
+
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -65,13 +73,6 @@ export default function SignIn() {
   const toggleForgotPasswordDialog = () => {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
-
-  interface AuthResponse {
-    username: string;
-    name: string;
-    id: number;  
-    role_id: number; 
-  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
