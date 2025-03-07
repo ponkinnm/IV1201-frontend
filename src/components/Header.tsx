@@ -13,7 +13,6 @@ function Header() {
   const { i18n } = useTranslation();
   const [language, setLanguage] = useState("en"); //Use english as default language
   const navigate = useNavigate();
-  const [logoutErrorMessage, setLogoutErrorMessage] = React.useState('');
 
   const { t } = useTranslation("Header");
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -28,9 +27,9 @@ function Header() {
       if (response.ok) {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("role_id");
-        navigate('/'); 
+        void navigate('/'); 
       } else {
-        setLogoutErrorMessage(t("logout_failed_error"));
+        console.error(t("log_failed_log out"));
       }
     } catch (error) {
       console.error(t("log_failed_log out"), error);
@@ -79,7 +78,7 @@ function Header() {
               {isLoggedIn && (
                 <Button
                   color="inherit"
-                  onClick={handleLogout}
+                  onClick={() => void handleLogout()}
                   sx={{ marginLeft: 2 }}
                 >
                   Logout

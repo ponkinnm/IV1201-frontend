@@ -66,6 +66,13 @@ export default function SignIn() {
     setShowForgotPasswordDialog(!showForgotPasswordDialog);
   };
 
+  interface AuthResponse {
+    username: string;
+    name: string;
+    id: number;  // Assuming `person_id` is a number
+    role_id: number;  // Assuming `role_id` is a number
+  }
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -83,7 +90,7 @@ export default function SignIn() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data : AuthResponse = await response.json();
         const {role_id} = data; 
         localStorage.setItem("role_id", role_id.toString());
         localStorage.setItem("isLoggedIn", "true");
