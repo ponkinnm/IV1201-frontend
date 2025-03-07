@@ -69,8 +69,8 @@ export default function SignIn() {
   interface AuthResponse {
     username: string;
     name: string;
-    id: number;  // Assuming `person_id` is a number
-    role_id: number;  // Assuming `role_id` is a number
+    id: number;  
+    role_id: number; 
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
