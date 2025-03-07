@@ -91,7 +91,7 @@ export default function SignIn() {
       });
 
       if (response.ok) {
-        const data : AuthResponse = await response.json();
+        const data: AuthResponse = await response.json() as AuthResponse;
         const {role_id} = data; 
         localStorage.setItem("role_id", role_id.toString());
         localStorage.setItem("isLoggedIn", "true");
