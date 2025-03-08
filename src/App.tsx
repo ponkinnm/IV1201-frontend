@@ -10,7 +10,7 @@ import Application from './pages/Application.tsx';
 import { theme } from './theme/theme.ts';
 import SignUp from './pages/SignUp.tsx';
 import './i18n';
-import PrivateRoute from './components/PrivateRoute.tsx'; // Import PrivateRoute
+import PrivateRoute from './components/PrivateRoute.tsx';
 import PublicRoute from "./components/PublicRoute";
 /**
  * Routes to the following views:
