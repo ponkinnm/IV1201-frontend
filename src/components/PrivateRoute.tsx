@@ -14,7 +14,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
     return <Navigate to="/" replace />; // Redirect unauthorized users to home
   }
     if(isLoggedIn &&  !allowedRoles.includes(roleId)){
-    return <Navigate to="*" replace />; 
+    return <Navigate to="/user" replace />; 
     }
 
   return children;
