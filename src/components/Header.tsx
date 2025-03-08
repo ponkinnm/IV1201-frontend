@@ -6,7 +6,6 @@ import { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
 
 
 function Header() {
