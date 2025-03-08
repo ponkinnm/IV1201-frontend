@@ -24,6 +24,31 @@
         "log_failed_login": "Login request failed:"
     },
 
+    "SignUpForm": {
+        "email_error_msg": "Please enter a valid email address.",
+        "password_error_msg": "Password must be at least 6 characters long.",
+        "name_error_msg": "Name is required.",
+        "surname_error_msg": "Surname is required.",
+        "username_error_msg": "Username is required.",
+        "pnr_error_msg": "Personal number is required.",
+        "sign_up": "Sign up",
+        "name": "Name",
+        "name_placeholder": "Jon",
+        "surname": "Surname",
+        "surname_placeholder": "Snow",
+        "pnr": "Personal Number",
+        "pnr_placeholder": "12342556",
+        "username": "Username",
+        "username_placeholder": "Jon231",
+        "email": "Email",
+        "email_placeholder": "your@email.com",
+        "password": "Password",
+        "password_placeholder": "••••••",
+        "or": "or",
+        "have_account": "Already have an account?",
+        "sign_in": "Sign in"
+    },
+
     "ForgotPassword": {
         "headline": "Reset password",
         "action_msg": "Enter your account's email address, and we'll send you a link toreset your password.",
