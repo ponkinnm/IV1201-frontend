@@ -49,6 +49,14 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+interface AuthResponse {
+  username: string;
+  name: string;
+  id: number;  
+  role_id: number; 
+}
+
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -73,7 +81,7 @@ export default function SignIn() {
     if (!validateInputs()) {
       return;
     }
-
+    
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
@@ -83,6 +91,10 @@ export default function SignIn() {
       });
 
       if (response.ok) {
+        const data: AuthResponse = await response.json() as AuthResponse;
+        const {role_id} = data; 
+        localStorage.setItem("role_id", role_id.toString());
+        localStorage.setItem("isLoggedIn", "true");
         void navigate('/user');
       } else {
         setLoginErrorMessage(t("login_failed_error"));

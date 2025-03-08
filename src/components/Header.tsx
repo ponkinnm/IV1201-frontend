@@ -1,15 +1,40 @@
-import { AppBar, Box, Toolbar, Typography, FormControl, Select, MenuItem} from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, FormControl, Select, MenuItem, Button} from '@mui/material';
 import { Attractions } from '@mui/icons-material';
 import { Link} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LanguageIcon from '@mui/icons-material/Language';
+import { useNavigate } from 'react-router-dom';
+
 
 function Header() {
   const { i18n } = useTranslation();
   const [language, setLanguage] = useState("en"); //Use english as default language
+  const navigate = useNavigate();
 
+  const { t } = useTranslation("Header");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("role_id");
+        void navigate('/'); 
+      } else {
+        console.error(t("log_failed_log out"));
+      }
+    } catch (error) {
+      console.error(t("log_failed_log out"), error);
+    }
+
+  };
 
   const changeLanguage = (language: string) => {
     void i18n.changeLanguage(language);
@@ -49,6 +74,15 @@ function Header() {
                   <MenuItem value="sv">Svenska</MenuItem>
                 </Select>
               </FormControl>
+              {isLoggedIn && (
+                <Button
+                  color="inherit"
+                  onClick={() => void handleLogout()}
+                  sx={{ marginLeft: 2 }}
+                >
+                  Logout
+            </Button>
+          )}
             </Box>
       </Toolbar>
     </AppBar>
