@@ -90,7 +90,7 @@ export default function ApplicationDetails() {
     setIsUpdating(true);
     setStatusUpdateError('');
 
-    try {//${import.meta.env.VITE_API_URL}
+    try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/${application_id}/status`, {
         method: 'PUT',
         credentials: 'include',
