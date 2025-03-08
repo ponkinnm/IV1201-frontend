@@ -64,7 +64,7 @@ export default function ApplicationDetails() {
   ];
 
   const fetchDetails = useCallback(async () => {
-    try { //${import.meta.env.VITE_API_URL}
+    try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/applications/${application_id}`, {
         credentials: 'include',
       });
