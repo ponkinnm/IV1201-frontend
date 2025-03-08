@@ -24,6 +24,31 @@
         "log_failed_login": "Inloggningsförfrågan misslyckades:"
     },
 
+    "SignUpForm": {
+        "email_error_msg": "Vänligen ange en giltig epost.",
+        "password_error_msg": "Lösenordet måste ha minst 6 tecken.",
+        "name_error_msg": "Namn krävs.",
+        "surname_error_msg": "Efternamn krävs.",
+        "username_error_msg": "Användarnamn krävs.",
+        "pnr_error_msg": "Personnummer krävs.",
+        "sign_up": "Registrera konto",
+        "name": "Namn",
+        "name_placeholder": "Jon",
+        "surname": "Efternamn",
+        "surname_placeholder": "Snow",
+        "pnr": "Personnummer",
+        "pnr_placeholder": "12342556",
+        "username": "Användarnamn",
+        "username_placeholder": "Jon231",
+        "email": "Epost",
+        "email_placeholder": "din@epost.se",
+        "password": "Lösenord",
+        "password_placeholder": "••••••",
+        "or": "eller",
+        "have_account": "Har du redan ett konto?",
+        "sign_in": "Logga in"
+    },
+
     "ForgotPassword": {
         "headline": "Återställ lösenord",
         "action_msg": "Ange e-postadressen för ditt konto, så skickar vi en länk för att återställa ditt lösenord.",
