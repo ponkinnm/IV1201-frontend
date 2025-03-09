@@ -17,6 +17,7 @@ i18n
 	fallbackLng: 'en', 
     resources: {
         en: {
+			Header: en.Header,
             HomePage: en.HomePage,
             SignInForm: en.SignInForm,
 			ForgotPassword: en.ForgotPassword,
@@ -31,6 +32,7 @@ i18n
 			NotFound: en.NotFound
         },
         sv: {
+			Header: sv.Header,
             HomePage: sv.HomePage,
             SignInForm: sv.SignInForm,
 			ForgotPassword: sv.ForgotPassword,
