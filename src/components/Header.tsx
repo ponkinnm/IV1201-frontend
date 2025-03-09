@@ -52,38 +52,50 @@ function Header() {
           </Box>
         </Link>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <LanguageIcon sx={{ alignSelf: "center", margin: 1 }}/>
-          <FormControl>
-                <Select
-                  id={"language"}
-                  name={"language_selector"}
-                  value={language}
-                  IconComponent={ArrowDropDownIcon}
-                  onChange={(event) => {
-                    if(event !== null){
-                      setLanguage(event.target.value)
-                      changeLanguage(event.target.value);
-                    }
-                  }}
-                  sx={{
-                    backgroundColor: "white",
-                    width: 100
-                  }}
-                >
-                  <MenuItem value="en">English</MenuItem>
-                  <MenuItem value="sv">Svenska</MenuItem>
-                </Select>
-              </FormControl>
-              {isLoggedIn && (
-                <Button
-                  color="inherit"
-                  onClick={() => void handleLogout()}
-                  sx={{ marginLeft: 2 }}
-                >
-                  Logout
+          {isLoggedIn && (
+            <Button
+              color="inherit"
+              onClick={() => void handleLogout()}
+              sx={{ marginRight: 2, backgroundColor: "white", color: "black"}}
+            >
+            {t("logout")}
             </Button>
           )}
-            </Box>
+          <Box  
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "white",
+              borderRadius: 1,
+              boxShadow: 1,
+            }}>
+            <LanguageIcon sx={{ alignSelf: "center", marginLeft: 0.5, marginRight: 0.5, color: "#1976d2"}}/>
+            <FormControl>
+              <Select
+                id={"language"}
+                name={"language_selector"}
+                value={language}
+                IconComponent={ArrowDropDownIcon}
+                onChange={(event) => {
+                  if(event !== null){
+                    setLanguage(event.target.value)
+                    changeLanguage(event.target.value);
+                  }
+
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  width: 100,
+                  border: "none",
+                  boxShadow: "none"
+                }}
+              >
+                <MenuItem value="en">English</MenuItem>
+                <MenuItem value="sv">Svenska</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
       </Toolbar>
     </AppBar>
   );
