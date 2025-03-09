@@ -177,7 +177,7 @@ export default function SignIn() {
               />
             </FormControl>
             <ForgotPassword open={showForgotPasswordDialog} handleClose={toggleForgotPasswordDialog} />
-            <Button type="submit" fullWidth variant="contained">
+            <Button type="submit" fullWidth variant="contained" color="secondary">
             {t("button")}
             </Button>
             <Link

@@ -51,7 +51,7 @@ export default function ForgotPassword({ open, handleClose }: ForgotPasswordProp
       </DialogContent>
       <DialogActions sx={{ pb: 3, px: 3 }}>
         <Button onClick={handleClose}>{t("button_cancel")}</Button>
-        <Button variant="contained" type="submit">{t("button_continue")}</Button>
+        <Button variant="contained" type="submit" color="secondary">{t("button_continue")}</Button>
       </DialogActions>
     </Dialog>
   );

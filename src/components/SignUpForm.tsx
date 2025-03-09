@@ -308,6 +308,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               onClick={validateInputs}
+              color="secondary"
             >
               {t("sign_up")}
             </Button>

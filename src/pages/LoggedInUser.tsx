@@ -12,8 +12,8 @@ function LoggedInUser() {
     <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: 4}}>
       <Typography>{t("logged_in_msg")}</Typography>
       { role_id === 1 ? (
-      <Button onClick={() => { void navigate("/applicants") }}>{t("button_1")}</Button>) : (
-      <Button onClick={() => { void navigate("/apply") }}>{t("button_2")}</Button> 
+      <Button onClick={() => { void navigate("/applicants") }} sx={{backgroundColor: "#1976d2", color: "white", margin: 2 }}>{t("button_1")}</Button>) : (
+      <Button onClick={() => { void navigate("/apply") }} sx={{backgroundColor: "#1976d2", color: "white", margin: 2 }}>{t("button_2")}</Button> 
     )}
     </Box>
   );
